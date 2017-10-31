@@ -1,0 +1,53 @@
+CREATE TABLE 'ygo_main'(
+  
+  id 		INTEGER 	PRIMARY KEY AUTOINCREMENT NOT NULL,
+  passcode 	INTEGER 	NOT NULL,
+  name_en 	TEXT 	NOT NULL,
+  name_jp	TEXT	NOT NULL,
+  card_type TEXT	NOT NULL,
+  attribute TEXT, 
+  level_or_rank	INTEGER,
+  scale			INTEGER,
+  attack		INTEGER,
+  defence		INTEGER, 
+  link          INTEGER,
+  material		TEXT
+  
+  );
+CREATE TABLE 'ygo_type_list'(
+ 	passcode INTEGER NOT NULL,
+  	type TEXT NOT NULL,
+  	FOREIGN KEY(passcode) REFERENCES ygo_main(passcode)
+  );
+
+CREATE TABLE 'ygo_effect_keyword_list'(
+ 	passcode INTEGER NOT NULL,
+  	effect_keyword TEXT NOT NULL,
+  	FOREIGN KEY(passcode) REFERENCES ygo_main(passcode)
+  );
+
+CREATE TABLE 'ygo_names'(
+ 	passcode	INTEGER	NOT NULL,
+  	name		TEXT NOT NULL,
+  	FOREIGN KEY(passcode) REFERENCES ygo_main(passcode)
+  );
+
+CREATE TABLE 'ygo_link_arrows'(
+ 	passcode	INTEGER	NOT NULL,
+  	link_arrows		TEXT NOT NULL,
+  	FOREIGN KEY(passcode) REFERENCES ygo_main(passcode)
+  );
+
+
+CREATE TABLE 'ygo_effect_keyword_list'(
+ 	passcode INTEGER NOT NULL,
+  	effect_keyword TEXT NOT NULL,
+  	FOREIGN KEY(passcode) REFERENCES ygo_main(passcode)
+  );
+
+CREATE TABLE 'ygo_archtype'(
+ 	passcode	INTEGER	NOT NULL,
+  	wiki_archtype_text		TEXT NOT NULL,
+	ygo_pro_archtype_code	INTEGER,
+  	FOREIGN KEY(passcode) REFERENCES ygo_main(passcode)
+  );

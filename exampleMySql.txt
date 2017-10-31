@@ -1,0 +1,40 @@
+
+CREATE TABLE IF NOT EXISTS `docs` (
+  `id` int(6) unsigned NOT NULL,
+  `rev` int(3) unsigned NOT NULL,
+  `content` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`,`rev`)
+) DEFAULT CHARSET=utf8;
+INSERT INTO `docs` (`id`, `rev`, `content`) VALUES
+  ('1', '1', 'The earth is flat'),
+  ('2', '1', 'One hundred angels can dance on the head of a pin'),
+  ('1', '2', 'The earth is flat and rests on a bull\'s horn'),
+  ('1', '3', 'The earth is like a ball.');
+
+
+
+/// <summary>
+		/// converts the genre's name to an actual genre object
+		/// </summary>
+		/// <param name="Genre_Name"> The title of the genre to be set </param>
+		/// <param name="Music_Database">The database that the genre is going to be added to</param>
+		/// <returns>a genre that shares the same name as the genre name imputed </returns>
+		public Genre Set_Genre(string Genre_Name, Song_DataBase Music_Database)
+		{
+			if (String.IsNullOrEmpty(Genre_Name) == true)
+				Genre_Name = "Blank";
+
+			var Current_Genre_Index = Music_Database.Get_Genre_Index();
+
+			this.Genre = Current_Genre_Index.FirstOrDefault(x => x.Get_Title() == Genre_Name);
+
+			if (Genre == null)
+			{
+				Genre Temp = new Genre(Genre_Name);
+				Current_Genre_Index.Add(Temp);
+				this.Genre = Temp;
+			}
+            //TODO: MOVE GENRE /ARTIST SET TO DATABASE CLASS BECAUSE THE METADATA REFRENCE IS COPYED ON TO THE STACK IT TECH ISNT A REFRENCE 
+			return this.Genre;
+		}
+
