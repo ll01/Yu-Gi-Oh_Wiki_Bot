@@ -316,6 +316,10 @@ namespace Ygo_Deck_Helper
 
                     
                     continue;
+                } finally {
+                    using(var card_context = new Card_Context()) {
+                        //TODO: FINISH SAVING
+                    }
                 }
 
                 //Console.WriteLine(card_Url);

@@ -22,10 +22,10 @@ namespace Ygo_Deck_Helper
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
                 var mySql_Connection_string = new MySqlConnectionStringBuilder();
-                mySql_Connection_string.Server = "";
-                mySql_Connection_string.UserID = "";
-                mySql_Connection_string.Password = "";
-                mySql_Connection_string.Database = "";
+                mySql_Connection_string.Server = "08240newyear.000webhostapp.com";
+                mySql_Connection_string.UserID = "id447835_x";
+                mySql_Connection_string.Password = "r5JJq?U^vp-XWSPeL?9dEH!xJ%We-@TC";
+                mySql_Connection_string.Database = "id447835_card_db";
 
                 optionsBuilder.UseMySQL(mySql_Connection_string.ToString());
      		}

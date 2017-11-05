@@ -24,11 +24,11 @@ namespace Ygo_Deck_Helper
         public int? Scale { get => main_Card_Data.scale; set => main_Card_Data.scale = value; }
         public int? Attack { get => main_Card_Data.attack; set => main_Card_Data.attack = value; }
         public int? Defence { get => main_Card_Data.defence; set => main_Card_Data.defence = value; }
-		private List<string> m_Link_Arrows;
+        private List<string> m_Link_Arrows;
         public List<string> Link_Arrows { get => m_Link_Arrows; set => m_Link_Arrows = value; }
-		private List<string> effect_type_list; 
+        private List<string> effect_type_list;
         public List<string> Effect_type_list { get => effect_type_list; set => effect_type_list = value; }
-		private List<string> m_Archtype_List; 
+        private List<string> m_Archtype_List;
         public List<string> Archtype_List { get => m_Archtype_List; set => m_Archtype_List = value; }
 
 
@@ -40,7 +40,7 @@ namespace Ygo_Deck_Helper
         {
             main_Card_Data = new Main_Card_Data();
             this.Passcode = Passcode;
-			YGOPro_type_number = Type_Number;
+            YGOPro_type_number = Type_Number;
             this.Name_English = Card_Name;
         }
 
@@ -48,9 +48,9 @@ namespace Ygo_Deck_Helper
         string Level_Or_Rank_As_String, string Scale_As_String, string Attack_As_String, string defence_Link_As_String, string Matieral,
          List<String> effect_type_list, List<string> Type_List, List<string> Archtype_List)
         {
-			main_Card_Data = new Main_Card_Data();
+            main_Card_Data = new Main_Card_Data();
             this.Passcode = Passcode;
-            this.Name_English= Card_Name_English;
+            this.Name_English = Card_Name_English;
             this.Name_Japanese = Card_Name_Japanese;
             this.Card_Type_Text = Card_Type;
 
@@ -89,7 +89,11 @@ namespace Ygo_Deck_Helper
             return YGOPro_type_number;
         }
 
-        
+        public Main_Card_Data Get_main_card_data() {
+            return main_Card_Data;
+        }
+
+
 
         public void Add_Nullable_Parameter(SQLiteCommand Sql_Command, string Parameter_Name, object Value_To_Add)
         {
@@ -200,14 +204,16 @@ namespace Ygo_Deck_Helper
 
             using (var card_database_context = new Card_Context())
             {
-				//http://www.hexacta.com/2016/06/01/task-run-vs-async-await/
-				var insert = Task.Run( () => {
-                card_database_context.Main_Card_Data.Add(main_Card_Data);
+                //http://www.hexacta.com/2016/06/01/task-run-vs-async-await/
+               
+                    card_database_context.Main_Card_Data.Add(main_Card_Data);
 
-				 card_database_context.AddRangeAsync(Archtype_List);
-				
-				);
-			}
+                Task a = card_database_context.AddRangeAsync(Archtype_List);
+                Task b = card_database_context.AddRangeAsync(Link_Arrows);
+                Task c = card_database_context.AddRangeAsync(Archtype_List);
+                
+            }
+        
 
         }
     }
