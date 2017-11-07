@@ -248,7 +248,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Stargrail-Bearing Priestess", false);
             Card Normal_Monster = await Wiki_Search.Scrape_Card();
-            Assert.Equal("World Chalice-Bearing Priestess", Normal_Monster.Name_English);
+            Assert.Equal("Crowned by the World Chalice", Normal_Monster.Name_English);
             Assert.Equal("星杯を戴く巫女", Normal_Monster.Name_Japanese);
             Assert.Equal("Monster", Normal_Monster.Card_Type_Text);
             Assert.Equal("WATER", Normal_Monster.Attribute);
@@ -411,7 +411,7 @@ namespace Ygo_Deck_Helper_Cli
             Assert.Equal(null, Normal_Monster.Defence);
             Assert.Equal(64599569, Normal_Monster.Passcode);
             Assert.Equal(new string[] { "Chimeratech", "Cyber Dragon" }, Normal_Monster.Archtype_List);
-            Assert.Equal("\"Cyber Dragon\" + 1 or more Machine-Type monsters", Normal_Monster.Matieral);
+            Assert.Equal("\"Cyber Dragon\" + 1+ Machine monsters", Normal_Monster.Matieral);
         }
 
 
@@ -434,7 +434,7 @@ namespace Ygo_Deck_Helper_Cli
         }
 
 
-        [Fact]
+        //[Fact]
         public async void Scrape_Card()
         {
             await YuGiOh_Wiki_Search.Scrape_All_Cards();

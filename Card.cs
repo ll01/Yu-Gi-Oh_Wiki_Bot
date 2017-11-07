@@ -54,6 +54,8 @@ namespace Ygo_Deck_Helper
             this.Name_Japanese = Card_Name_Japanese;
             this.Card_Type_Text = Card_Type;
 
+           
+
             this.m_Attribute_Type_List = Type_List;
             this.effect_type_list = effect_type_list;
             if (Archtype_List != null)
@@ -89,7 +91,8 @@ namespace Ygo_Deck_Helper
             return YGOPro_type_number;
         }
 
-        public Main_Card_Data Get_main_card_data() {
+        public Main_Card_Data Get_main_card_data()
+        {
             return main_Card_Data;
         }
 
@@ -205,15 +208,8 @@ namespace Ygo_Deck_Helper
             using (var card_database_context = new Card_Context())
             {
                 //http://www.hexacta.com/2016/06/01/task-run-vs-async-await/
-               
-                    card_database_context.Main_Card_Data.Add(main_Card_Data);
 
-                Task a = card_database_context.AddRangeAsync(Archtype_List);
-                Task b = card_database_context.AddRangeAsync(Link_Arrows);
-                Task c = card_database_context.AddRangeAsync(Archtype_List);
-                
             }
-        
 
         }
     }
