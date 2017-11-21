@@ -10,7 +10,6 @@ namespace Ygo_Deck_Helper
     public class Card_Context : DbContext
     {
         public DbSet<Main_Card_Data> Main_Card_Data { get; set; }
-        public DbSet<Type_Table> Type_Table { get; set; }
 
         public DbSet<Effect_keyword_Table> Effect_keyword_Table { get; set; }
 
@@ -25,16 +24,16 @@ namespace Ygo_Deck_Helper
         {
             
 
-            /* 
+            
             var mySql_Connection_string = new  MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
-            mySql_Connection_string.Server = "card.database.windows.net";
-            mySql_Connection_string.UserID = "ll01";
-            mySql_Connection_string.Password = "qmvWY@empKg8L@&d8JkSK";
+              mySql_Connection_string.Server = "127.0.0.1";
+            mySql_Connection_string.UserID = "x";
+            mySql_Connection_string.Password = "x";
             mySql_Connection_string.Database = "card_db";
-            */
+            
 
 
-            optionsBuilder.UseSqlServer("Server=tcp:card.database.windows.net,1433;Initial Catalog=card_db;Persist Security Info=False;User ID=ll01;Password=qmvWY@empKg8L@&d8JkSK;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            optionsBuilder.UseMySql(mySql_Connection_string.ToString());
         }
 
         public Card_Context() {
@@ -61,13 +60,6 @@ namespace Ygo_Deck_Helper
 
     }
 
-    public class Type_Table
-    {
-        public int id { get; set; }
-        public int passcode { get; set; }
-        public string type { get; set; }
-
-    }
 
     public class Effect_keyword_Table
     {

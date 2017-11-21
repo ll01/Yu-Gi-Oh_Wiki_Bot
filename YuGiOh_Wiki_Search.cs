@@ -56,10 +56,11 @@ namespace Ygo_Deck_Helper
         /// </summary>
         /// <param name="Card_Name">the name to search ygo wiki for</param>
         /// <returns>a key value pair where the key is the id of the card and the bool is wether or not the search is sucsesful</returns>
-        public async Task<(string Infomation, bool isSucsesful)> Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field Data_Field)
+        public async Task<(string Infomation, string Country_Code, bool isSucsesful)> Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field Data_Field)
         {
             string xPath_Query = null;
             bool select_Multiple = false;
+            string Country_Code = "N/A";
             switch (Data_Field)
             {
                 case YuGiOh_Wiki_Data_Field.Passcode:
@@ -68,34 +69,42 @@ namespace Ygo_Deck_Helper
 
                 case YuGiOh_Wiki_Data_Field.Name_en:
                     xPath_Query = "//th[text() = 'English']/following-sibling::td";
+                    Country_Code = "EN";
                     break;
 
                 case YuGiOh_Wiki_Data_Field.Name_fr:
                     xPath_Query = "//th[text() = 'French']/following-sibling::td/span";
+                    Country_Code = "FR";
                     break;
 
                 case YuGiOh_Wiki_Data_Field.Name_de:
                     xPath_Query = "//th[text() = 'German']/following-sibling::td/span";
+                    Country_Code = "DE";
                     break;
 
                 case YuGiOh_Wiki_Data_Field.Name_it:
                     xPath_Query = "//th[text() = 'Italian']/following-sibling::td/span";
+                    Country_Code = "IT";
                     break;
 
                 case YuGiOh_Wiki_Data_Field.Name_kr:
                     xPath_Query = "//th[text() = 'Korean']/following-sibling::td/span";
+                    Country_Code = "KR";
                     break;
 
                 case YuGiOh_Wiki_Data_Field.Name_pt:
                     xPath_Query = "//th[text() = 'Portuguese']/following-sibling::td/span";
+                    Country_Code = "PT";
                     break;
 
                 case YuGiOh_Wiki_Data_Field.Name_es:
                     xPath_Query = "//th[text() = 'Spanish']/following-sibling::td/span";
+                    Country_Code = "ES";
                     break;
 
                 case YuGiOh_Wiki_Data_Field.Name_jp:
                     xPath_Query = "//th[contains(., 'Japanese') and contains(., '(base)')]/following-sibling::td/span | //th[text() = 'Japanese']/following-sibling::td/span";
+                   Country_Code = "JP";
                     break;
 
                 case YuGiOh_Wiki_Data_Field.Card_Type:
@@ -156,12 +165,13 @@ namespace Ygo_Deck_Helper
                            Select(x => x.InnerText.Trim())) : Card_Text_Node[0].InnerText;
                     Card_Text = string.IsNullOrWhiteSpace(Card_Infomation_Selected) ? NOT_APPLICABLE : Card_Infomation_Selected.Trim();
                 }
-                return (Card_Text, true);
+                return (Card_Text, Country_Code, true);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return (null, false);
+                string error = "N/A somthing whent wrong" + e.Message ;
+                return (error, error, false);
             }
         }
 
@@ -230,6 +240,9 @@ namespace Ygo_Deck_Helper
 
                 string Card_Name_English = (await Name_EN).Infomation;
                 string Card_Name_Japanese = (await Card_Name_Japanese_Task).Infomation;
+
+                //TODO: ADD FORIGN NAMES 
+
                 string Passcode = (await Passcode_Raw_Task).Infomation;
                 if (Passcode == null)
                     Passcode = illigal_Card_Counter--.ToString();
@@ -304,7 +317,7 @@ namespace Ygo_Deck_Helper
                 {
                   
                     Card New_Card = await Card_Query.Scrape_Card();
-                    await New_Card.insert_Into_Wiki_Database();
+                     New_Card.insert_Into_Wiki_Database();
                 }
                 catch
                 {

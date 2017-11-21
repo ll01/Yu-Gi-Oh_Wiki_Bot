@@ -24,15 +24,19 @@ namespace Ygo_Deck_Helper
         public int? Scale { get => main_Card_Data.scale; set => main_Card_Data.scale = value; }
         public int? Attack { get => main_Card_Data.attack; set => main_Card_Data.attack = value; }
         public int? Defence { get => main_Card_Data.defence; set => main_Card_Data.defence = value; }
-        private List<string> m_Link_Arrows;
+
+
+
+
+        private List<string> m_Link_Arrows = new List<string>();
         public List<string> Link_Arrows { get => m_Link_Arrows; set => m_Link_Arrows = value; }
-        private List<string> effect_type_list;
-        public List<string> Effect_type_list { get => effect_type_list; set => effect_type_list = value; }
-        private List<string> m_Archtype_List;
+        private List<string> m_effect_type_list = new List<string>();
+        public List<string> Effect_type_list { get => m_effect_type_list; set => m_effect_type_list = value; }
+        private List<string> m_Archtype_List  = new List<string>();
         public List<string> Archtype_List { get => m_Archtype_List; set => m_Archtype_List = value; }
 
 
-        private List<string> m_Attribute_Type_List;
+        private List<string> m_Attribute_Type_List = new List<string>();
         public List<string> Attribute_Type_List { get => m_Attribute_Type_List; set => m_Attribute_Type_List = value; }
 
 
@@ -54,10 +58,10 @@ namespace Ygo_Deck_Helper
             this.Name_Japanese = Card_Name_Japanese;
             this.Card_Type_Text = Card_Type;
 
-           
+           //new collections 
 
             this.m_Attribute_Type_List = Type_List;
-            this.effect_type_list = effect_type_list;
+            this.m_effect_type_list = effect_type_list;
             if (Archtype_List != null)
                 this.m_Archtype_List = Archtype_List.Distinct().ToList();
             if (Card_Type == "Monster")
@@ -111,104 +115,43 @@ namespace Ygo_Deck_Helper
         }
         public async Task insert_Into_Wiki_Database()
         {
-            // 	var SqlConnection = new SQLiteConnection(@"Data Source = data.db");
-            // 	SqlConnection.Open();
-            // 	var Sql_Transaction = SqlConnection.BeginTransaction();
-            // 	var Sql_Command = new SQLiteCommand();
-            // 	Sql_Command.Connection = SqlConnection;
+            var Link_Arrows_To_Insert = Link_Arrows.Select(x => {
+                var temp = new link_arrow_Table();
+                temp.link_arrow = x;
+                temp.passcode = this.Passcode;
+                return temp;
+            });
 
-            // 	try
-            // 	{
-
-            // 		Sql_Command.Parameters.AddWithValue("@passcode", this.Passcode);
-            // 		Sql_Command.Parameters.AddWithValue("@name_en", this.Card_Name_English);
-            // 		if(this.m_Name_Japanese == null)
-            // 		this.m_Name_Japanese = "N/A";
-            // 		Sql_Command.Parameters.AddWithValue("@name_jp", this.m_Name_Japanese);
-            // 		Sql_Command.Parameters.AddWithValue("@card_type", this.Card_Type_Text);
-
-            // 		List<Task> Sub_Query_List = new List<Task>();
-
-            // 		Sql_Command.Parameters.Add("@archtype_name", DbType.String);
-            // 		foreach (string Archtype in Archtype_List ?? Enumerable.Empty<string>())
-            // 		{
-            // 			Sql_Command.Parameters["@archtype_name"].Value = Archtype;
-            // 			Sql_Command.CommandText = "INSERT INTO ygo_archtype(passcode, wiki_archtype_text) values (@passcode, @archtype_name)";
-            // 			Sub_Query_List.Add( Sql_Command.ExecuteNonQueryAsync());
-            // 		}
-
-            // 		if (Card_Type_Text == "Monster")
-            // 		{
-            // 			Sql_Command.Parameters.AddWithValue("@attribute", this.Attribute);
-            // 			Sql_Command.Parameters.AddWithValue("@level_rank_or_link", this.m_Level_Rank_Or_Link);
-
-            // 			Add_Nullable_Parameter(Sql_Command, "@scale", this.Scale);
-
-            // 			Add_Nullable_Parameter(Sql_Command, "@attack", this.Attack);
-            // 			Add_Nullable_Parameter(Sql_Command, "@defence", this.Defence);
-            // 			Add_Nullable_Parameter(Sql_Command,"@material", this.Matieral);
-
-            // 			Sql_Command.CommandText = @"INSERT INTO ygo_main(passcode, name_en, name_jp, card_type, attribute, level_or_rank, scale, attack, defence, material) 
-            // 			values (@passcode, @name_en, @name_jp, @card_type, @attribute, @level_rank_or_link, @scale, @attack, @defence, @material)";
-            // 			Task main_Query =   Sql_Command.ExecuteNonQueryAsync();
-
-            // 			Sql_Command.Parameters.Add("@Attribute_Type", DbType.String);
-
-
-            // 			foreach (string Type in this.Attribute_Type_List)
-            // 			{
-            // 				Sql_Command.Parameters["@Attribute_Type"].Value = Type;
-            // 				Sql_Command.CommandText = "INSERT INTO ygo_type_list(passcode, type) values (@passcode, @Attribute_Type)";
-            // 				Sub_Query_List.Add( Sql_Command.ExecuteNonQueryAsync());
-            // 			}
-
-            // 			Sql_Command.Parameters.Add("@Effect_Keyword", DbType.String);
-            // 			foreach (string Effect in effect_type_list ?? Enumerable.Empty<string>())
-            // 			{
-            // 				Sql_Command.Parameters["@Effect_Keyword"].Value = Effect;
-            // 				Sql_Command.CommandText = "INSERT INTO ygo_effect_keyword_list(passcode, effect_keyword) values (@passcode, @Effect_Keyword)";
-            // 				Sub_Query_List.Add( Sql_Command.ExecuteNonQueryAsync());
-            // 			}
-
-            // 			Sql_Command.Parameters.Add("@Link_Arrow", DbType.String);
-
-            // 			if (this.Attribute_Type_List.Contains("Link"))
-            // 			{
-            // 				foreach (string Link_Arrow_item in Link_Arrows)
-            // 				{
-            // 					Sql_Command.Parameters["@Link_Arrow"].Value = Link_Arrow_item;
-
-            // 					Sql_Command.CommandText = "INSERT INTO ygo_link_arrows(passcode, link_arrows) values(@passcode, @Link_Arrow)";
-            // 					Sub_Query_List.Add( Sql_Command.ExecuteNonQueryAsync());
-            // 				}
-            // 			}
-            // 			await main_Query; 
-            // 		}
-            // 		else{
-            // 			 Sql_Command.CommandText = @"INSERT INTO ygo_main(passcode, name_en, name_jp, card_type) 
-            // 			values (@passcode, @name_en, @name_jp, @card_type)";
-            // 			await Sql_Command.ExecuteNonQueryAsync();
-            // 		}
-            // 		await Task.WhenAll(Sub_Query_List.ToArray());
-            // 		Sql_Transaction.Commit();
-            // 	}
-            // 	catch (Exception e)
-            // 	{
-            // 		Sql_Transaction.Rollback();
-            // 		Console.WriteLine(e.ToString());
-            // 		Console.WriteLine("record was not written to database.");
-
-
-            // 	}
-            // 	finally
-            // 	{
-            // 		SqlConnection.Close();
-            // 	}
-
+            var Effect_Types_To_Insert = Effect_type_list.Select(x => {
+                var temp = new Effect_keyword_Table();
+                temp.effect_name = x;
+                temp.passcode = this.Passcode;
+                return temp;
+            });
+             var Archtypes_To_Insert = Archtype_List.Select(x => {
+                var temp = new Archtype_Table();
+                temp.archtype_name = x;
+                temp.passcode = this.Passcode;
+                return temp;
+            });
+             var Attribute_Types_To_Insert = Attribute_Type_List.Select(x => {
+                var temp = new Attribute_Table();
+                temp.Attribute_Name = x;
+                temp.passcode = this.Passcode;
+                return temp;
+            });
+           
+            
             using (var card_database_context = new Card_Context())
             {
                 //http://www.hexacta.com/2016/06/01/task-run-vs-async-await/
+                //TODO: WRITE TABLE INSERTION   
 
+                card_database_context.Add(Link_Arrows_To_Insert);
+                card_database_context.Add(Effect_Types_To_Insert);
+                card_database_context.Add(Archtypes_To_Insert);
+                card_database_context.Add(Attribute_Types_To_Insert);
+                card_database_context.Add(main_Card_Data);
             }
 
         }
