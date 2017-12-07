@@ -65,7 +65,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_es);
+            var TestQuery = await Wiki_Search.Scrape_Card_Name((int)YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_es);
             Assert.Equal("Trishula, Dragón de la Barrera de Hielo", TestQuery.Infomation);
 
         }
