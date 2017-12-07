@@ -26,7 +26,7 @@ namespace Ygo_Deck_Helper
 
             
             var mySql_Connection_string = new  MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
-              mySql_Connection_string.Server = "127.0.0.1";
+            mySql_Connection_string.Server = "127.0.0.1";
             mySql_Connection_string.UserID = "x";
             mySql_Connection_string.Password = "x";
             mySql_Connection_string.Database = "card_db";

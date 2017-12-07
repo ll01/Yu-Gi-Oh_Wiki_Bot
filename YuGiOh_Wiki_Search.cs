@@ -22,14 +22,14 @@ namespace Ygo_Deck_Helper
 
         public enum YuGiOh_Wiki_Data_Field
         {
-            Name_en,
-            Name_fr,
-            Name_de,
-            Name_it,
-            Name_kr,
-            Name_pt,
-            Name_es,
-            Name_jp,
+            Name_en = 0,
+            Name_fr = 1,
+            Name_de = 2,
+            Name_it = 3,
+            Name_kr = 4,
+            Name_pt = 5,
+            Name_es = 6,
+            Name_jp = 7,
             Name_Translated,
             Card_Type,
             Attribute,
@@ -56,7 +56,7 @@ namespace Ygo_Deck_Helper
         /// </summary>
         /// <param name="Card_Name">the name to search ygo wiki for</param>
         /// <returns>a key value pair where the key is the id of the card and the bool is wether or not the search is sucsesful</returns>
-        public async Task<(string Infomation, string Country_Code, bool isSucsesful)> Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field Data_Field)
+        public async Task<(string Infomation, bool isSucsesful)> Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field Data_Field)
         {
             string xPath_Query = null;
             bool select_Multiple = false;
@@ -72,39 +72,9 @@ namespace Ygo_Deck_Helper
                     Country_Code = "EN";
                     break;
 
-                case YuGiOh_Wiki_Data_Field.Name_fr:
-                    xPath_Query = "//th[text() = 'French']/following-sibling::td/span";
-                    Country_Code = "FR";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Name_de:
-                    xPath_Query = "//th[text() = 'German']/following-sibling::td/span";
-                    Country_Code = "DE";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Name_it:
-                    xPath_Query = "//th[text() = 'Italian']/following-sibling::td/span";
-                    Country_Code = "IT";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Name_kr:
-                    xPath_Query = "//th[text() = 'Korean']/following-sibling::td/span";
-                    Country_Code = "KR";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Name_pt:
-                    xPath_Query = "//th[text() = 'Portuguese']/following-sibling::td/span";
-                    Country_Code = "PT";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Name_es:
-                    xPath_Query = "//th[text() = 'Spanish']/following-sibling::td/span";
-                    Country_Code = "ES";
-                    break;
-
                 case YuGiOh_Wiki_Data_Field.Name_jp:
                     xPath_Query = "//th[contains(., 'Japanese') and contains(., '(base)')]/following-sibling::td/span | //th[text() = 'Japanese']/following-sibling::td/span";
-                   Country_Code = "JP";
+                    Country_Code = "JP";
                     break;
 
                 case YuGiOh_Wiki_Data_Field.Card_Type:
@@ -153,26 +123,81 @@ namespace Ygo_Deck_Helper
                     Exception e = new NotImplementedException("Feild to scrape " + Data_Field.ToString() + "not implemented yet");
                     throw e;
             }
-            try
-            {
-                string Card_Text = NOT_APPLICABLE;
+            
+                
                 //find the table row that contains card number and scrap that cell
                 var Card_Text_Node = this.Card_Page.DocumentNode.SelectNodes(xPath_Query);
-                if (Card_Text_Node != null)
+                var Card_Data = GetCardTextFromNode(Card_Text_Node, select_Multiple);
+                string Card_Text = Card_Data.Card_Text;
+                bool isSucsesful = Card_Data.isSucsesful;
+                return (Card_Text, isSucsesful);
+        }
+        public (string Card_Text , bool isSucsesful) GetCardTextFromNode(HtmlNodeCollection Card_Text_Node, bool select_Multiple) {
+            string Card_Text = NOT_APPLICABLE;
+            bool isSucsesful = false;
+            try {
+            if (Card_Text_Node != null)
                 {
+                    
                     string Card_Infomation_Selected = select_Multiple ? string.Join(",", Card_Text_Node.Nodes().
                            Where(x => !string.IsNullOrEmpty(x.InnerText)).
                            Select(x => x.InnerText.Trim())) : Card_Text_Node[0].InnerText;
                     Card_Text = string.IsNullOrWhiteSpace(Card_Infomation_Selected) ? NOT_APPLICABLE : Card_Infomation_Selected.Trim();
+                    isSucsesful = true;
                 }
-                return (Card_Text, Country_Code, true);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
+                isSucsesful = false;
                 Console.WriteLine(e.Message);
-                string error = "N/A somthing whent wrong" + e.Message ;
-                return (error, error, false);
+                string error = "N/A somthing whent wrong" + e.Message;
             }
+
+            return (Card_Text, isSucsesful);
+
+        }
+        public async Task<(string Infomation, string Country_Code, bool isSucsesful)> Scrape_Card_Name(int YuGiOh_Wiki_Data_Field_Index)
+        {
+            string xPath_Query = null;
+            string Country_Code = "N/A";
+       
+        switch (YuGiOh_Wiki_Data_Field_Index)
+            {
+                case (int)YuGiOh_Wiki_Data_Field.Name_fr:
+                    xPath_Query = "//th[text() = 'French']/following-sibling::td/span";
+                    Country_Code = "FR";
+                    break;
+
+                case (int)YuGiOh_Wiki_Data_Field.Name_de:
+                    xPath_Query = "//th[text() = 'German']/following-sibling::td/span";
+                    Country_Code = "DE";
+                    break;
+
+                case (int)YuGiOh_Wiki_Data_Field.Name_it:
+                    xPath_Query = "//th[text() = 'Italian']/following-sibling::td/span";
+                    Country_Code = "IT";
+                    break;
+
+                case (int)YuGiOh_Wiki_Data_Field.Name_kr:
+                    xPath_Query = "//th[text() = 'Korean']/following-sibling::td/span";
+                    Country_Code = "KR";
+                    break;
+
+                case (int)YuGiOh_Wiki_Data_Field.Name_pt:
+                    xPath_Query = "//th[text() = 'Portuguese']/following-sibling::td/span";
+                    Country_Code = "PT";
+                    break;
+
+                case (int)YuGiOh_Wiki_Data_Field.Name_es:
+                    xPath_Query = "//th[text() = 'Spanish']/following-sibling::td/span";
+                    Country_Code = "ES";
+                    break;
+            }
+                var Card_Text_Node = this.Card_Page.DocumentNode.SelectNodes(xPath_Query);
+                var Card_Data = GetCardTextFromNode(Card_Text_Node, false);
+                string Card_Text = Card_Data.Card_Text;
+                bool isSucsesful = Card_Data.isSucsesful;
+                return (Card_Text, Country_Code,  isSucsesful);
+            
         }
 
         // async factory http://blog.stephencleary.com/2013/01/async-oop-2-constructors.html
@@ -216,86 +241,96 @@ namespace Ygo_Deck_Helper
             using (var data = await client.GetAsync(Card_Url).ConfigureAwait(continueOnCapturedContext: false))
                 return await data.Content.ReadAsStringAsync().ConfigureAwait(continueOnCapturedContext: false);
         }
-        static  int illigal_Card_Counter  = -1;
+        static int illigal_Card_Counter = -1;
         public async Task<Card> Scrape_Card()
         {
 
+            var Name_EN = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Name_en);
+            var Card_Name_Japanese_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Name_jp);
+
            
-
-                var Name_EN = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Name_en);
-                var Card_Name_Japanese_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Name_jp);
-
-                var Card_Type_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Card_Type);
-                var Passcode_Raw_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Passcode);
+            var Card_Type_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Card_Type);
+            var Passcode_Raw_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Passcode);
 
 
 
-                var ArchType_Query_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.ArchType);
+            var ArchType_Query_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.ArchType);
 
-                var Effect_Type_Query_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Effect_Type_List);
+            var Effect_Type_Query_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Effect_Type_List);
 
-                var Type_Property_Query_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Type_List);
+            var Type_Property_Query_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Type_List);
 
-
-
-                string Card_Name_English = (await Name_EN).Infomation;
-                string Card_Name_Japanese = (await Card_Name_Japanese_Task).Infomation;
-
-                //TODO: ADD FORIGN NAMES 
-
-                string Passcode = (await Passcode_Raw_Task).Infomation;
-                if (Passcode == null)
-                    Passcode = illigal_Card_Counter--.ToString();
-
-                var ArchType_Query = (await ArchType_Query_Task);
-                string ArchType_List_Raw = ArchType_Query.isSucsesful ? ArchType_Query.Infomation : NOT_APPLICABLE;
-                List<string> ArchType_List_Split = !string.IsNullOrEmpty(ArchType_List_Raw) ? ArchType_List_Split = ArchType_List_Raw.Split(',').ToList() : null;
-
-                var Effect_Type_Query = (await Effect_Type_Query_Task);
-                List<string> Effect_Type_List = Effect_Type_Query.isSucsesful && Effect_Type_Query.Infomation != null ? Data_Check.Split_Card_Effect_List(Effect_Type_Query.Infomation) : null;
-
-                var Type_Property_Query = (await Type_Property_Query_Task);
-                List<string> Type_Property_List = Type_Property_Query.isSucsesful ? Type_Property_Query.Infomation.Split('/').Select(x => x.Trim()).ToList() : null;
-                string Card_Type = (await Card_Type_Task).Infomation;
-                bool isMonster = Card_Type.ToLower() == "monster";
-                bool isLink = Type_Property_List.Contains("Link");
-                bool isExtaDeckCard = Type_Property_List.Contains("Link") || Type_Property_List.Contains("Synchro") ||
-                  Type_Property_List.Contains("Xyz") || Type_Property_List.Contains("Fusion");
-
-
-
-                var Attribute_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Attribute);
-                var Level_Rank_String_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Level_Rank);
-                var Scale_Query_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Scale);
-                var Link_Arrows_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Link_Arrows);
-                var Material_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Material);
-
-                string Attribute = isMonster ? (await Attribute_Task).Infomation : NOT_APPLICABLE;
-                string Level_Rank_String = isMonster ? (await Level_Rank_String_Task).Infomation : NOT_APPLICABLE;
-
-
-                var Scale_Query = await Scale_Query_Task;
-                string Scale = isMonster ? Scale_Query.Infomation : NOT_APPLICABLE;
-
-                string Defence_or_Link = null;
-                string Attack = null;
-                if (isMonster)
-                {
-                    string Stat_Line_Raw = isMonster ? (await Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Stat_Line)).Infomation : NOT_APPLICABLE;
-                    string[] Stat_Line_Split = Stat_Line_Raw.Split('/');
-                    Attack = Stat_Line_Split[0];
-                    Defence_or_Link = Stat_Line_Split[1];
+            List<Foreign_Name_Table> Foreign_Names  = new List<Foreign_Name_Table>();
+            for (int i = (int)YuGiOh_Wiki_Data_Field.Name_fr; i <= (int)YuGiOh_Wiki_Data_Field.Name_es; i++)
+            {
+                var Name_Infomation  = await Scrape_Card_Name(i);
+                Foreign_Name_Table temp = new Foreign_Name_Table();
+                if (Name_Infomation.isSucsesful) {
+                temp.card_name = Name_Infomation.Infomation;
+                temp.contry_code = Name_Infomation.Country_Code;
+                Foreign_Names.Add(temp);
                 }
+            }
 
-                List<string> Link_Arrows = isLink ? (await Link_Arrows_Task).Infomation.Split(',').ToList() : null;
-                string Material = isExtaDeckCard ? (await Material_Task).Infomation : NOT_APPLICABLE;
-                return new Card(int.Parse(Passcode), Card_Name_English, Card_Name_Japanese, Card_Type, Attribute,
-                Level_Rank_String, Scale, Attack, Defence_or_Link, Material, Effect_Type_List, Type_Property_List, ArchType_List_Split);
-         
 
-               
-            
-         
+            string Card_Name_English = (await Name_EN).Infomation;
+            string Card_Name_Japanese = (await Card_Name_Japanese_Task).Infomation;
+
+            //TODO: ADD FORIGN NAMES 
+
+            string Passcode = (await Passcode_Raw_Task).Infomation;
+            if (Passcode == null)
+                Passcode = illigal_Card_Counter--.ToString();
+
+            var ArchType_Query = (await ArchType_Query_Task);
+            string ArchType_List_Raw = ArchType_Query.isSucsesful ? ArchType_Query.Infomation : NOT_APPLICABLE;
+            List<string> ArchType_List_Split = !string.IsNullOrEmpty(ArchType_List_Raw) ? ArchType_List_Split = ArchType_List_Raw.Split(',').ToList() : new List<string>();
+
+            var Effect_Type_Query = (await Effect_Type_Query_Task);
+            List<string> Effect_Type_List = Effect_Type_Query.isSucsesful && Effect_Type_Query.Infomation != null ? Data_Check.Split_Card_Effect_List(Effect_Type_Query.Infomation) : new List<string>();
+
+            var Type_Property_Query = (await Type_Property_Query_Task);
+            List<string> Type_Property_List = Type_Property_Query.isSucsesful ? Type_Property_Query.Infomation.Split('/').Select(x => x.Trim()).ToList() : new List<string>();
+            string Card_Type = (await Card_Type_Task).Infomation;
+            bool isMonster = Card_Type.ToLower() == "monster";
+            bool isLink = Type_Property_List.Contains("Link");
+            bool isExtaDeckCard = Type_Property_List.Contains("Link") || Type_Property_List.Contains("Synchro") ||
+              Type_Property_List.Contains("Xyz") || Type_Property_List.Contains("Fusion");
+
+
+
+            var Attribute_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Attribute);
+            var Level_Rank_String_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Level_Rank);
+            var Scale_Query_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Scale);
+            var Link_Arrows_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Link_Arrows);
+            var Material_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Material);
+
+            string Attribute = isMonster ? (await Attribute_Task).Infomation : NOT_APPLICABLE;
+            string Level_Rank_String = isMonster ? (await Level_Rank_String_Task).Infomation : NOT_APPLICABLE;
+
+
+            var Scale_Query = await Scale_Query_Task;
+            string Scale = isMonster ? Scale_Query.Infomation : NOT_APPLICABLE;
+
+            string Defence_or_Link = null;
+            string Attack = null;
+            if (isMonster)
+            {
+                string Stat_Line_Raw = isMonster ? (await Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Stat_Line)).Infomation : NOT_APPLICABLE;
+                string[] Stat_Line_Split = Stat_Line_Raw.Split('/');
+                Attack = Stat_Line_Split[0];
+                Defence_or_Link = Stat_Line_Split[1];
+            }
+
+            List<string> Link_Arrows = isLink ? (await Link_Arrows_Task).Infomation.Split(',').ToList() : null;
+            string Material = isExtaDeckCard ? (await Material_Task).Infomation : NOT_APPLICABLE;
+            return new Card(int.Parse(Passcode), Card_Name_English, Card_Name_Japanese, Card_Type, Attribute,
+            Level_Rank_String, Scale, Attack, Defence_or_Link, Material, Effect_Type_List, Type_Property_List, ArchType_List_Split, Foreign_Names);
+
+
+
+
+
         }
 
         public static async Task Scrape_Wiki_Name_List_Page(string Current_Wiki_Card_Page_Url)
@@ -315,9 +350,9 @@ namespace Ygo_Deck_Helper
                 var Card_Query = await Create_YuGiOh_Wiki_Search(card_Url, true);
                 try
                 {
-                  
+
                     Card New_Card = await Card_Query.Scrape_Card();
-                     New_Card.insert_Into_Wiki_Database();
+                    New_Card.insert_Into_Wiki_Database();
                 }
                 catch
                 {
@@ -327,10 +362,13 @@ namespace Ygo_Deck_Helper
 
                     file.Close();
 
-                    
+
                     continue;
-                } finally {
-                    using(var card_context = new Card_Context()) {
+                }
+                finally
+                {
+                    using (var card_context = new Card_Context())
+                    {
                         //TODO: FINISH SAVING
                     }
                 }
@@ -357,8 +395,8 @@ namespace Ygo_Deck_Helper
             {
                 //var Current_Task =  Task.Run(() => Scrape_Wiki_Name_List_Page(Current_Wiki_Card_Page_Url + "?page=" + i));
 
-               Task Current_Task = await Task.Run<Task>(() => Scrape_Wiki_Name_List_Page(Current_Wiki_Card_Page_Url + "?page=" + i));
-               Scrape_Task_List.Add(Current_Task);
+                Task Current_Task = await Task.Run<Task>(() => Scrape_Wiki_Name_List_Page(Current_Wiki_Card_Page_Url + "?page=" + i));
+                Scrape_Task_List.Add(Current_Task);
             }
             for (int i = 2; i < page_Count; i = i + 2)
             {
@@ -367,7 +405,7 @@ namespace Ygo_Deck_Helper
                 Task Current_Task = await Task.Run<Task>(() => Scrape_Wiki_Name_List_Page(Current_Wiki_Card_Page_Url + "?page=" + i));
                 Scrape_Task_List.Add(Current_Task);
             }
-            await Task.WhenAll(Scrape_Task_List.ToArray()); 
+            await Task.WhenAll(Scrape_Task_List.ToArray());
             return true;
         }
     }

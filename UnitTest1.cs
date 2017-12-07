@@ -420,7 +420,8 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("http://yugioh.wikia.com/wiki/Dark_Magician_(Arkana)", true);
             Card Normal_Monster = await Wiki_Search.Scrape_Card();
-             Normal_Monster.insert_Into_Wiki_Database();
+            await Normal_Monster.insert_Into_Wiki_Database();
+             
             using (var Card_Context = new Card_Context())
             {
                 Main_Card_Data Normal_Monster_From_Database_main_card_data = Card_Context.Main_Card_Data.First(x => x.passcode == Normal_Monster.Passcode);

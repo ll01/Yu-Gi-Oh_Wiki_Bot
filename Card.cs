@@ -39,6 +39,7 @@ namespace Ygo_Deck_Helper
         private List<string> m_Attribute_Type_List = new List<string>();
         public List<string> Attribute_Type_List { get => m_Attribute_Type_List; set => m_Attribute_Type_List = value; }
 
+        public List<Foreign_Name_Table> Foreign_Name_Entrys = new List<Foreign_Name_Table>();
 
         public Card(int Passcode, int Type_Number, string Card_Name)
         {
@@ -50,7 +51,7 @@ namespace Ygo_Deck_Helper
 
         public Card(int Passcode, string Card_Name_English, string Card_Name_Japanese, string Card_Type, string Attribute,
         string Level_Or_Rank_As_String, string Scale_As_String, string Attack_As_String, string defence_Link_As_String, string Matieral,
-         List<String> effect_type_list, List<string> Type_List, List<string> Archtype_List)
+         List<String> effect_type_list, List<string> Type_List, List<string> Archtype_List, List<Foreign_Name_Table> Foreign_Names)
         {
             main_Card_Data = new Main_Card_Data();
             this.Passcode = Passcode;
@@ -59,6 +60,7 @@ namespace Ygo_Deck_Helper
             this.Card_Type_Text = Card_Type;
 
            //new collections 
+            
 
             this.m_Attribute_Type_List = Type_List;
             this.m_effect_type_list = effect_type_list;
@@ -87,6 +89,9 @@ namespace Ygo_Deck_Helper
                 if (this.m_Attribute_Type_List.Contains("Pendulum"))
                     this.Scale = int.Parse(Scale_As_String);
             }
+
+            Foreign_Name_Entrys = Foreign_Names;
+            Foreign_Name_Entrys.ForEach(x => x.passcode= this.Passcode);
 
         }
 
@@ -147,11 +152,14 @@ namespace Ygo_Deck_Helper
                 //http://www.hexacta.com/2016/06/01/task-run-vs-async-await/
                 //TODO: WRITE TABLE INSERTION   
 
-                card_database_context.Add(Link_Arrows_To_Insert);
-                card_database_context.Add(Effect_Types_To_Insert);
-                card_database_context.Add(Archtypes_To_Insert);
-                card_database_context.Add(Attribute_Types_To_Insert);
-                card_database_context.Add(main_Card_Data);
+                
+                card_database_context.Archtype_Table.AddRange(Archtypes_To_Insert);
+                card_database_context.link_arrow_Table.AddRange(Link_Arrows_To_Insert);
+                card_database_context.Effect_keyword_Table.AddRange(Effect_Types_To_Insert);
+                card_database_context.Attribute_Table.AddRange(Attribute_Types_To_Insert);
+                card_database_context.Main_Card_Data.AddRange(main_Card_Data);
+                card_database_context.Foreign_Name_Table.AddRange(Foreign_Name_Entrys);
+                card_database_context.SaveChanges();
             }
 
         }
