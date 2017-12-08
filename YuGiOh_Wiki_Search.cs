@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Ygo_Deck_Helper
 {
-    internal class YuGiOh_Wiki_Search
+    public class YuGiOh_Wiki_Search
     {
         private const string YuGiOhWikiUrl = "http://yugioh.wikia.com/wiki/";
 
@@ -19,6 +19,7 @@ namespace Ygo_Deck_Helper
 
         private string Card_Url;
         private HtmlDocument Card_Page;
+        static private Database DatabaseToAddCardsTo;
 
         public enum YuGiOh_Wiki_Data_Field
         {
@@ -56,81 +57,82 @@ namespace Ygo_Deck_Helper
         /// </summary>
         /// <param name="Card_Name">the name to search ygo wiki for</param>
         /// <returns>a key value pair where the key is the id of the card and the bool is wether or not the search is sucsesful</returns>
-        public async Task<(string Infomation, bool isSucsesful)> Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field Data_Field)
+        public (string Infomation, bool isSucsesful) Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field Data_Field)
         {
-            string xPath_Query = null;
-            bool select_Multiple = false;
-            string Country_Code = "N/A";
-            switch (Data_Field)
-            {
-                case YuGiOh_Wiki_Data_Field.Passcode:
-                    xPath_Query = "//th/a[text() = 'Passcode']/../following-sibling::td";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Name_en:
-                    xPath_Query = "//th[text() = 'English']/following-sibling::td";
-                    Country_Code = "EN";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Name_jp:
-                    xPath_Query = "//th[contains(., 'Japanese') and contains(., '(base)')]/following-sibling::td/span | //th[text() = 'Japanese']/following-sibling::td/span";
-                    Country_Code = "JP";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Card_Type:
-                    xPath_Query = "//th/a[normalize-space(text()) = 'Card type']/../following-sibling::td";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Attribute:
-                    xPath_Query = "//th/a[text() = 'Attribute']/../following-sibling::td";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Type_List:
-                    xPath_Query = "//th/a[text() = 'Types']/../following-sibling::td |//th/a[text() = 'Type']/../following-sibling::td | //th/a[text() = 'Property']/../following-sibling::td";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Level_Rank:
-                    xPath_Query = "//th/a[text() = 'Level']/../following-sibling::td/a[1] | //th/a[text() = 'Rank']/../following-sibling::td/a[1]";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Scale:
-                    xPath_Query = "//th/a[text() = 'Pendulum Scale']/../following-sibling::td/a[2]";
-                    break;
-                case YuGiOh_Wiki_Data_Field.Link_Arrows:
-                    select_Multiple = true;
-                    xPath_Query = "//th/a[normalize-space(text()) = 'Link Arrows']/../following-sibling::td/a[not(contains(.,'img'))]";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Stat_Line:
-                    xPath_Query = "//th[contains(., 'ATK') and contains(., 'DEF')]/following-sibling::td | //th[contains(., 'ATK') and contains(., 'LINK')]/following-sibling::td";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Material:
-                    xPath_Query = "//th[text() = 'Materials']/following-sibling::td";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.Effect_Type_List:
-                    xPath_Query = "//th[normalize-space(text()) = 'Card effect types']/following-sibling::td";
-                    break;
-
-                case YuGiOh_Wiki_Data_Field.ArchType:
-                    select_Multiple = true;
-                    xPath_Query = "//div[@class = 'cardtable-categories']/div[contains(., 'Archetypes')]/dl/dd/a | //div[@class = 'cardtable-categories']/div[contains(., 'archetypes')]/dl/dd/a";
-                    break;
-
-
-                default:
-                    Exception e = new NotImplementedException("Feild to scrape " + Data_Field.ToString() + "not implemented yet");
-                    throw e;
-            }
             
-                
+               string xPath_Query = null;
+               bool select_Multiple = false;
+               string Country_Code = "N/A";
+               switch (Data_Field)
+               {
+                   case YuGiOh_Wiki_Data_Field.Passcode:
+                       xPath_Query = "//th/a[text() = 'Passcode']/../following-sibling::td";
+                       break;
+
+                   case YuGiOh_Wiki_Data_Field.Name_en:
+                       xPath_Query = "//th[text() = 'English']/following-sibling::td";
+                       Country_Code = "EN";
+                       break;
+
+                   case YuGiOh_Wiki_Data_Field.Name_jp:
+                       xPath_Query = "//th[contains(., 'Japanese') and contains(., '(base)')]/following-sibling::td/span | //th[text() = 'Japanese']/following-sibling::td/span";
+                       Country_Code = "JP";
+                       break;
+
+                   case YuGiOh_Wiki_Data_Field.Card_Type:
+                       xPath_Query = "//th/a[normalize-space(text()) = 'Card type']/../following-sibling::td";
+                       break;
+
+                   case YuGiOh_Wiki_Data_Field.Attribute:
+                       xPath_Query = "//th/a[text() = 'Attribute']/../following-sibling::td";
+                       break;
+
+                   case YuGiOh_Wiki_Data_Field.Type_List:
+                       xPath_Query = "//th/a[text() = 'Types']/../following-sibling::td |//th/a[text() = 'Type']/../following-sibling::td | //th/a[text() = 'Property']/../following-sibling::td";
+                       break;
+
+                   case YuGiOh_Wiki_Data_Field.Level_Rank:
+                       xPath_Query = "//th/a[text() = 'Level']/../following-sibling::td/a[1] | //th/a[text() = 'Rank']/../following-sibling::td/a[1]";
+                       break;
+
+                   case YuGiOh_Wiki_Data_Field.Scale:
+                       xPath_Query = "//th/a[text() = 'Pendulum Scale']/../following-sibling::td/a[2]";
+                       break;
+                   case YuGiOh_Wiki_Data_Field.Link_Arrows:
+                       select_Multiple = true;
+                       xPath_Query = "//th/a[normalize-space(text()) = 'Link Arrows']/../following-sibling::td/a[not(contains(.,'img'))]";
+                       break;
+
+                   case YuGiOh_Wiki_Data_Field.Stat_Line:
+                       xPath_Query = "//th[contains(., 'ATK') and contains(., 'DEF')]/following-sibling::td | //th[contains(., 'ATK') and contains(., 'LINK')]/following-sibling::td";
+                       break;
+
+                   case YuGiOh_Wiki_Data_Field.Material:
+                       xPath_Query = "//th[text() = 'Materials']/following-sibling::td";
+                       break;
+
+                   case YuGiOh_Wiki_Data_Field.Effect_Type_List:
+                       xPath_Query = "//th[normalize-space(text()) = 'Card effect types']/following-sibling::td";
+                       break;
+
+                   case YuGiOh_Wiki_Data_Field.ArchType:
+                       select_Multiple = true;
+                       xPath_Query = "//div[@class = 'cardtable-categories']/div[contains(., 'Archetypes')]/dl/dd/a | //div[@class = 'cardtable-categories']/div[contains(., 'archetypes')]/dl/dd/a";
+                       break;
+
+
+                   default:
+                       Exception e = new NotImplementedException("Feild to scrape " + Data_Field.ToString() + "not implemented yet");
+                       throw e;
+               }
+
+
                 //find the table row that contains card number and scrap that cell
                 var Card_Text_Node = this.Card_Page.DocumentNode.SelectNodes(xPath_Query);
-                var Card_Data = GetCardTextFromNode(Card_Text_Node, select_Multiple);
-                string Card_Text = Card_Data.Card_Text;
-                bool isSucsesful = Card_Data.isSucsesful;
-                return (Card_Text, isSucsesful);
+               var Card_Data = GetCardTextFromNode(Card_Text_Node, select_Multiple);
+               string Card_Text = Card_Data.Card_Text;
+               bool isSucsesful = Card_Data.isSucsesful;
+               return (Card_Text, isSucsesful);
         }
         public (string Card_Text , bool isSucsesful) GetCardTextFromNode(HtmlNodeCollection Card_Text_Node, bool select_Multiple) {
             string Card_Text = NOT_APPLICABLE;
@@ -155,7 +157,7 @@ namespace Ygo_Deck_Helper
             return (Card_Text, isSucsesful);
 
         }
-        public async Task<(string Infomation, string Country_Code, bool isSucsesful)> Scrape_Card_Name(int YuGiOh_Wiki_Data_Field_Index)
+        public (string Infomation, string Country_Code, bool isSucsesful) Scrape_Card_Name(int YuGiOh_Wiki_Data_Field_Index)
         {
             string xPath_Query = null;
             string Country_Code = "N/A";
@@ -245,25 +247,25 @@ namespace Ygo_Deck_Helper
         public async Task<Card> Scrape_Card()
         {
 
-            var Name_EN = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Name_en);
-            var Card_Name_Japanese_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Name_jp);
+            var Name_EN = Task.Run(() => Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Name_en));
+            var Card_Name_Japanese_Task = Task.Run(() => Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Name_jp));
 
            
-            var Card_Type_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Card_Type);
-            var Passcode_Raw_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Passcode);
+            var Card_Type_Task = Task.Run(() => Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Card_Type));
+            var Passcode_Raw_Task = Task.Run(() => Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Passcode));
 
 
 
-            var ArchType_Query_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.ArchType);
+            var ArchType_Query_Task = Task.Run(() => Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.ArchType));
 
-            var Effect_Type_Query_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Effect_Type_List);
+            var Effect_Type_Query_Task = Task.Run(() => Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Effect_Type_List));
 
-            var Type_Property_Query_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Type_List);
+            var Type_Property_Query_Task = Task.Run(() => Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Type_List));
 
             List<Foreign_Name_Table> Foreign_Names  = new List<Foreign_Name_Table>();
             for (int i = (int)YuGiOh_Wiki_Data_Field.Name_fr; i <= (int)YuGiOh_Wiki_Data_Field.Name_es; i++)
             {
-                var Name_Infomation  = await Scrape_Card_Name(i);
+                var Name_Infomation  =  Scrape_Card_Name(i);
                 Foreign_Name_Table temp = new Foreign_Name_Table();
                 if (Name_Infomation.isSucsesful) {
                 temp.card_name = Name_Infomation.Infomation;
@@ -299,11 +301,11 @@ namespace Ygo_Deck_Helper
 
 
 
-            var Attribute_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Attribute);
-            var Level_Rank_String_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Level_Rank);
-            var Scale_Query_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Scale);
-            var Link_Arrows_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Link_Arrows);
-            var Material_Task = Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Material);
+            var Attribute_Task = Task.Run(() => Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Attribute));
+            var Level_Rank_String_Task = Task.Run(() => Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Level_Rank));
+            var Scale_Query_Task = Task.Run(() => Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Scale));
+            var Link_Arrows_Task = Task.Run(() => Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Link_Arrows));
+            var Material_Task = Task.Run(() => Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Material));
 
             string Attribute = isMonster ? (await Attribute_Task).Infomation : NOT_APPLICABLE;
             string Level_Rank_String = isMonster ? (await Level_Rank_String_Task).Infomation : NOT_APPLICABLE;
@@ -316,7 +318,7 @@ namespace Ygo_Deck_Helper
             string Attack = null;
             if (isMonster)
             {
-                string Stat_Line_Raw = isMonster ? (await Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Stat_Line)).Infomation : NOT_APPLICABLE;
+                string Stat_Line_Raw = isMonster ? ( Scrape_Card_Field_Infomation(YuGiOh_Wiki_Data_Field.Stat_Line)).Infomation : NOT_APPLICABLE;
                 string[] Stat_Line_Split = Stat_Line_Raw.Split('/');
                 Attack = Stat_Line_Split[0];
                 Defence_or_Link = Stat_Line_Split[1];
@@ -333,54 +335,60 @@ namespace Ygo_Deck_Helper
 
         }
 
-        public static async Task Scrape_Wiki_Name_List_Page(string Current_Wiki_Card_Page_Url)
+        private static async Task Scrape_Wiki_Name_List_Page(string Current_Wiki_Card_Page_Url)
         {
-
-            var Card_List_Page_Get = new HtmlWeb();
-            var Card_List_Page = Card_List_Page_Get.Load(Current_Wiki_Card_Page_Url);
-            HtmlNode YuGioh_Wiki_Main_DataNode = Card_List_Page.GetElementbyId("mw-pages");
-            var Card_Collection = YuGioh_Wiki_Main_DataNode.SelectNodes("//div[@class='mw-content-ltr']//table//ul//li").Nodes().ToArray();
-            List<Task> tl = new List<Task>();
-            for (int i = 0; i < Card_Collection.Length; i++)
+            if (DatabaseToAddCardsTo != null)
             {
-                HtmlNode Node = Card_Collection[i];
-                string card_Url = YuGiOhWikiUrl_LOCAL + Node.OuterHtml.Split('"')[1];
-                if (card_Url.Contains("(temp)") || card_Url.Contains("(original)"))
-                    continue;
-                var Card_Query = await Create_YuGiOh_Wiki_Search(card_Url, true);
-                try
+                Task insert = null;
+                var Card_List_Page_Get = new HtmlWeb();
+                var Card_List_Page = Card_List_Page_Get.Load(Current_Wiki_Card_Page_Url);
+                HtmlNode YuGioh_Wiki_Main_DataNode = Card_List_Page.GetElementbyId("mw-pages");
+                var Card_Collection = YuGioh_Wiki_Main_DataNode.SelectNodes("//div[@class='mw-content-ltr']//table//ul//li").Nodes().ToArray();
+                List<Task> tl = new List<Task>();
+                for (int i = 0; i < Card_Collection.Length; i++)
                 {
-
-                    Card New_Card = await Card_Query.Scrape_Card();
-                    New_Card.insert_Into_Wiki_Database();
-                }
-                catch
-                {
-                    Console.WriteLine(card_Url);
-                    System.IO.StreamWriter file = new System.IO.StreamWriter("test.txt");
-                    file.WriteLine(card_Url);
-
-                    file.Close();
-
-
-                    continue;
-                }
-                finally
-                {
-                    using (var card_context = new Card_Context())
+                    HtmlNode Node = Card_Collection[i];
+                    string card_Url = YuGiOhWikiUrl_LOCAL + Node.OuterHtml.Split('"')[1];
+                    if (card_Url.Contains("(temp)") || card_Url.Contains("(original)"))
+                        continue;
+                    var Card_Query = await Create_YuGiOh_Wiki_Search(card_Url, true);
+                    try
                     {
-                        //TODO: FINISH SAVING
+
+                        Card New_Card = await Card_Query.Scrape_Card();
+                        if (insert != null)
+                            await insert;
+                        insert = Task.Run(() => New_Card.insert_Into_Wiki_Database(DatabaseToAddCardsTo));
                     }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(card_Url + " error: " + e.Message);
+                        System.IO.StreamWriter file = new System.IO.StreamWriter("test.txt");
+                        file.WriteLine(card_Url);
+
+                        file.Close();
+
+
+                        continue;
+                    }
+                    finally
+                    {
+                        using (var card_context = new Card_Context(DatabaseToAddCardsTo))
+                        {
+                            //TODO: FINISH SAVING
+                        }
+                    }
+
+                    //Console.WriteLine(card_Url);
+
                 }
-
-                //Console.WriteLine(card_Url);
-
             }
             // await Task.WhenAll(tl.ToArray());
         }
 
-        public static async Task<bool> Scrape_All_Cards()
+        public static async Task<bool> Scrape_All_Cards(Database newdatabaseToAddCardsTo)
         {
+            DatabaseToAddCardsTo = newdatabaseToAddCardsTo;
             string Current_Wiki_Card_Page_Url = YuGiOhWikiUrl + "Category:TCG_cards";
 
             // this code scrapes the first page for the number of pages it needs to scrape

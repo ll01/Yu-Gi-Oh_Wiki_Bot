@@ -2,16 +2,18 @@ using System;
 using System.Linq;
 using Xunit;
 using Ygo_Deck_Helper;
+using Newtonsoft.Json;
 
-namespace Ygo_Deck_Helper_Cli
+namespace Ygo_Unit_Tests
 {
     public class UnitTest1
     {
+        Database testDatabase = new Database("127.0.0.1", "x", "x", "card_db");
         [Fact]
         public async void Name_En()
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_en);
+            var TestQuery =  Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_en);
             Assert.Equal("Trishula, Dragon of the Ice Barrier", TestQuery.Infomation);
 
         }
@@ -20,7 +22,7 @@ namespace Ygo_Deck_Helper_Cli
         public async void Name_Fr()
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_fr);
+            var TestQuery =  Wiki_Search.Scrape_Card_Name((int)YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_fr);
             Assert.Equal("Trishula, Dragon de la Barrière de Glace", TestQuery.Infomation);
 
         }
@@ -28,7 +30,7 @@ namespace Ygo_Deck_Helper_Cli
         public async void Name_De()
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_de);
+            var TestQuery =  Wiki_Search.Scrape_Card_Name((int)YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_de);
             Assert.Equal("Trishula, Drache der Eisbarriere", TestQuery.Infomation);
 
         }
@@ -37,7 +39,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_it);
+            var TestQuery =  Wiki_Search.Scrape_Card_Name((int)YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_it);
             Assert.Equal("Trishula, Drago della Barriera di Ghiaccio", TestQuery.Infomation);
 
         }
@@ -46,7 +48,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_kr);
+            var TestQuery = Wiki_Search.Scrape_Card_Name((int)YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_kr);
             Assert.Equal("빙결계의 용 트리슈라", TestQuery.Infomation);
 
         }
@@ -55,7 +57,7 @@ namespace Ygo_Deck_Helper_Cli
         public async void Name_Pt()
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_pt);
+            var TestQuery =  Wiki_Search.Scrape_Card_Name((int)YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_pt);
             Assert.Equal("Trishula, o Dragão da Barreira de Gelo", TestQuery.Infomation);
 
         }
@@ -65,7 +67,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Name((int)YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_es);
+            var TestQuery = Wiki_Search.Scrape_Card_Name((int)YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_es);
             Assert.Equal("Trishula, Dragón de la Barrera de Hielo", TestQuery.Infomation);
 
         }
@@ -75,7 +77,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_jp);
+            var TestQuery =  Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_jp);
             Assert.Equal("氷結界の龍 トリシューラ", TestQuery.Infomation);
 
         }
@@ -85,7 +87,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Card_Type);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Card_Type);
             Assert.Equal("Monster", TestQuery.Infomation);
 
         }
@@ -95,7 +97,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Attribute);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Attribute);
             Assert.Equal("WATER", TestQuery.Infomation);
 
         }
@@ -105,7 +107,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Type_List);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Type_List);
             Assert.Equal("Dragon / Synchro / Effect", TestQuery.Infomation);
 
         }
@@ -115,7 +117,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Monster Reborn", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Type_List);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Type_List);
             Assert.Equal("Normal", TestQuery.Infomation);
 
         }
@@ -125,7 +127,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Level_Rank);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Level_Rank);
             Assert.Equal("9", TestQuery.Infomation);
 
         }
@@ -136,7 +138,7 @@ namespace Ygo_Deck_Helper_Cli
 
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Evilswarm Ouroboros", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Level_Rank);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Level_Rank);
             Assert.Equal("4", TestQuery.Infomation);
 
         }
@@ -147,7 +149,7 @@ namespace Ygo_Deck_Helper_Cli
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
 
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Stat_Line);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Stat_Line);
             Assert.Equal("2700 / 2000", TestQuery.Infomation);
 
         }
@@ -158,7 +160,7 @@ namespace Ygo_Deck_Helper_Cli
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Stargrail Shrine Maiden Eve", false);
 
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Stat_Line);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Stat_Line);
             Assert.Equal("1800 / 2", TestQuery.Infomation);
 
         }
@@ -168,7 +170,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Material);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Material);
             Assert.Equal("1 Tuner + 2+ non-Tuner monsters", TestQuery.Infomation);
 
         }
@@ -178,7 +180,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Trishula, Dragon of the Ice Barrier", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Effect_Type_List);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Effect_Type_List);
             Assert.Equal("Trigger", TestQuery.Infomation);
 
         }
@@ -188,7 +190,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Evilswarm Ouroboros", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Effect_Type_List);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Effect_Type_List);
 
             Assert.Equal("Ignition\n Condition", TestQuery.Infomation);
         }
@@ -197,7 +199,7 @@ namespace Ygo_Deck_Helper_Cli
         public async void Split_Effect_Type_List()
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Evilswarm Ouroboros", false);
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Effect_Type_List);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Effect_Type_List);
 
             string Effect_Collection_NoSplit = TestQuery.Infomation;
             var Actual_Effect_Collection_Split = Data_Check.Split_Card_Effect_List(Effect_Collection_NoSplit).ToArray();
@@ -209,7 +211,7 @@ namespace Ygo_Deck_Helper_Cli
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Performapal Five-Rainbow Magician", false);
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Scale);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Scale);
 
             Assert.Equal("12", TestQuery.Infomation);
         }
@@ -220,7 +222,7 @@ namespace Ygo_Deck_Helper_Cli
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Stargrail Shrine Maiden Eve", false);
 
 
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Link_Arrows);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Link_Arrows);
             Assert.Equal("Left,Right", TestQuery.Infomation);
 
         }
@@ -229,7 +231,7 @@ namespace Ygo_Deck_Helper_Cli
         public async void Archetype()
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Performapal Five-Rainbow Magician", false);
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.ArchType);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.ArchType);
 
             Assert.Equal("Magician,Performapal", TestQuery.Infomation);
         }
@@ -238,7 +240,7 @@ namespace Ygo_Deck_Helper_Cli
         public async void Name_Using_Url()
         {
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("http://yugioh.wikia.com/wiki/Trishula,_Dragon_of_the_Ice_Barrier", true);
-            var TestQuery = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_en);
+            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Name_en);
             Assert.Equal("Trishula, Dragon of the Ice Barrier", TestQuery.Infomation);
 
         }
@@ -253,7 +255,7 @@ namespace Ygo_Deck_Helper_Cli
             Assert.Equal("Monster", Normal_Monster.Card_Type_Text);
             Assert.Equal("WATER", Normal_Monster.Attribute);
             Assert.Equal(new string[] { "Spellcaster", "Normal" }, Normal_Monster.Attribute_Type_List);
-            Assert.Equal(null, Normal_Monster.Effect_type_list);
+            Assert.Equal(0, Normal_Monster.Effect_type_list.Count());
             Assert.Equal(2, Normal_Monster.Level_Rank_Or_Link);
             Assert.Equal(0, Normal_Monster.Attack);
             Assert.Equal(2100, Normal_Monster.Defence);
@@ -344,7 +346,7 @@ namespace Ygo_Deck_Helper_Cli
             Assert.Equal(null, Normal_Monster.Attack);
             Assert.Equal(null, Normal_Monster.Defence);
             Assert.Equal(22047978, Normal_Monster.Passcode);
-            Assert.Equal(null, Normal_Monster.Archtype_List);
+            Assert.Equal(0, Normal_Monster.Archtype_List.Count());
             Assert.Equal(null, Normal_Monster.Matieral);
 
         }
@@ -418,27 +420,31 @@ namespace Ygo_Deck_Helper_Cli
         [Fact]
         public async void insert_Card_Into_Database()
         {
+            
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("http://yugioh.wikia.com/wiki/Dark_Magician_(Arkana)", true);
             Card Normal_Monster = await Wiki_Search.Scrape_Card();
-            await Normal_Monster.insert_Into_Wiki_Database();
+             Normal_Monster.insert_Into_Wiki_Database(testDatabase);
              
-            using (var Card_Context = new Card_Context())
+            using (var Card_Context = new Card_Context(testDatabase))
             {
                 Main_Card_Data Normal_Monster_From_Database_main_card_data = Card_Context.Main_Card_Data.First(x => x.passcode == Normal_Monster.Passcode);
                 var Normal_Monster_From_Database_Archtype_List = Card_Context.Archtype_Table.Where(x => x.passcode == Normal_Monster.Passcode).Select(x => x.archtype_name).ToList();
-				var  Normal_Monster_From_Database_Link_Arrow_List  = Card_Context.link_arrow_Table.Where(x => x.passcode == Normal_Monster.Passcode).Select(x => x.link_arrow).ToList();
+				var Normal_Monster_From_Database_Link_Arrow_List  = Card_Context.link_arrow_Table.Where(x => x.passcode == Normal_Monster.Passcode).Select(x => x.link_arrow).ToList();
+                var Normal_Monster_From_Database_Foreign_Name_List = Card_Context.Foreign_Name_Table.Where(x => x.passcode == Normal_Monster.Passcode).ToList();
 
-                Assert.Equal(Normal_Monster.Get_main_card_data(), Normal_Monster_From_Database_main_card_data);
-				Assert.Equal(Normal_Monster.Archtype_List, Normal_Monster_From_Database_Archtype_List);
-				Assert.Equal(Normal_Monster.Link_Arrows , Normal_Monster_From_Database_Link_Arrow_List);
+                Assert.Equal(JsonConvert.SerializeObject(Normal_Monster.Get_main_card_data()), JsonConvert.SerializeObject(Normal_Monster_From_Database_main_card_data));
+				Assert.Equal(Normal_Monster.Archtype_List.OrderBy(i => i),Normal_Monster_From_Database_Archtype_List.OrderBy(i => i));
+				Assert.Equal(Normal_Monster.Link_Arrows.OrderBy(i => i), Normal_Monster_From_Database_Link_Arrow_List.OrderBy(i => i));
+                Assert.Equal(Normal_Monster.Foreign_Name_Entrys.Select(i=> i.card_name).OrderBy(i => i), Normal_Monster_From_Database_Foreign_Name_List.Select(i => i.card_name).OrderBy(i => i));
             }
         }
 
 
-        //[Fact]
+
+        [Fact]
         public async void Scrape_Card()
         {
-            await YuGiOh_Wiki_Search.Scrape_All_Cards();
+            await YuGiOh_Wiki_Search.Scrape_All_Cards(testDatabase);
         }
 
     }

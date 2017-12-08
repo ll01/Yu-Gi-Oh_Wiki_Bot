@@ -19,24 +19,25 @@ namespace Ygo_Deck_Helper
 
         public DbSet<Attribute_Table> Attribute_Table {get; set; }
 
-       
+        Database currentDatabase;
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            
+            optionsBuilder.UseMySql(currentDatabase.GenerateConnectionString());
+        }
+     
 
-            
-            var mySql_Connection_string = new  MySql.Data.MySqlClient.MySqlConnectionStringBuilder();
-            mySql_Connection_string.Server = "127.0.0.1";
-            mySql_Connection_string.UserID = "x";
-            mySql_Connection_string.Password = "x";
-            mySql_Connection_string.Database = "card_db";
-            
-
-
-            optionsBuilder.UseMySql(mySql_Connection_string.ToString());
+        public void ClearAllTables() {
+            Main_Card_Data.RemoveRange(Main_Card_Data);
+            Effect_keyword_Table.RemoveRange(Effect_keyword_Table);
+            Foreign_Name_Table.RemoveRange(Foreign_Name_Table);
+            Archtype_Table.RemoveRange(Archtype_Table);
+            Attribute_Table.RemoveRange(Attribute_Table);
+            SaveChanges();
         }
 
-        public Card_Context() {
+        public Card_Context(Database database) {
+            currentDatabase = database;
             this.Database.EnsureCreated();
         }
 
@@ -47,7 +48,9 @@ namespace Ygo_Deck_Helper
 
         public int id { get; set; }
         public int passcode { get; set; }
+        [Column(TypeName = "VARCHAR(255)")]
         public string name_en { get; set; }
+        [Column(TypeName = "VARCHAR(255)")]
         public string name_jp { get; set; }
         public string card_type { get; set; }
         public string attribute { get; set; }
@@ -73,6 +76,7 @@ namespace Ygo_Deck_Helper
         public int id { get; set; }
         public int passcode { get; set; }
         public string contry_code { get; set; }
+        [Column(TypeName = "VARCHAR(255)")]
         public string card_name { get; set; }
 
     }

@@ -1,0 +1,115 @@
+Archtype_List.Select(x =>
+                {
+                    var temp = new link_arrow_Table();
+                    temp.link_arrow = x;
+                    temp.passcode = this.Passcode;
+                    return temp;
+                }
+                )
+
+
+
+        Task b = card_database_context.AddRangeAsync(Link_Arrows.Select(x =>
+                {
+                    var temp = new link_arrow_Table();
+                    temp.link_arrow = x;
+                    temp.passcode = this.Passcode;
+                    return temp;
+                }
+                ));
+
+
+
+ // 	var SqlConnection = new SQLiteConnection(@"Data Source = data.db");
+            // 	SqlConnection.Open();
+            // 	var Sql_Transaction = SqlConnection.BeginTransaction();
+            // 	var Sql_Command = new SQLiteCommand();
+            // 	Sql_Command.Connection = SqlConnection;
+
+            // 	try
+            // 	{
+
+            // 		Sql_Command.Parameters.AddWithValue("@passcode", this.Passcode);
+            // 		Sql_Command.Parameters.AddWithValue("@name_en", this.Card_Name_English);
+            // 		if(this.m_Name_Japanese == null)
+            // 		this.m_Name_Japanese = "N/A";
+            // 		Sql_Command.Parameters.AddWithValue("@name_jp", this.m_Name_Japanese);
+            // 		Sql_Command.Parameters.AddWithValue("@card_type", this.Card_Type_Text);
+
+            // 		List<Task> Sub_Query_List = new List<Task>();
+
+            // 		Sql_Command.Parameters.Add("@archtype_name", DbType.String);
+            // 		foreach (string Archtype in Archtype_List ?? Enumerable.Empty<string>())
+            // 		{
+            // 			Sql_Command.Parameters["@archtype_name"].Value = Archtype;
+            // 			Sql_Command.CommandText = "INSERT INTO ygo_archtype(passcode, wiki_archtype_text) values (@passcode, @archtype_name)";
+            // 			Sub_Query_List.Add( Sql_Command.ExecuteNonQueryAsync());
+            // 		}
+
+            // 		if (Card_Type_Text == "Monster")
+            // 		{
+            // 			Sql_Command.Parameters.AddWithValue("@attribute", this.Attribute);
+            // 			Sql_Command.Parameters.AddWithValue("@level_rank_or_link", this.m_Level_Rank_Or_Link);
+
+            // 			Add_Nullable_Parameter(Sql_Command, "@scale", this.Scale);
+
+            // 			Add_Nullable_Parameter(Sql_Command, "@attack", this.Attack);
+            // 			Add_Nullable_Parameter(Sql_Command, "@defence", this.Defence);
+            // 			Add_Nullable_Parameter(Sql_Command,"@material", this.Matieral);
+
+            // 			Sql_Command.CommandText = @"INSERT INTO ygo_main(passcode, name_en, name_jp, card_type, attribute, level_or_rank, scale, attack, defence, material) 
+            // 			values (@passcode, @name_en, @name_jp, @card_type, @attribute, @level_rank_or_link, @scale, @attack, @defence, @material)";
+            // 			Task main_Query =   Sql_Command.ExecuteNonQueryAsync();
+
+            // 			Sql_Command.Parameters.Add("@Attribute_Type", DbType.String);
+
+
+            // 			foreach (string Type in this.Attribute_Type_List)
+            // 			{
+            // 				Sql_Command.Parameters["@Attribute_Type"].Value = Type;
+            // 				Sql_Command.CommandText = "INSERT INTO ygo_type_list(passcode, type) values (@passcode, @Attribute_Type)";
+            // 				Sub_Query_List.Add( Sql_Command.ExecuteNonQueryAsync());
+            // 			}
+
+            // 			Sql_Command.Parameters.Add("@Effect_Keyword", DbType.String);
+            // 			foreach (string Effect in effect_type_list ?? Enumerable.Empty<string>())
+            // 			{
+            // 				Sql_Command.Parameters["@Effect_Keyword"].Value = Effect;
+            // 				Sql_Command.CommandText = "INSERT INTO ygo_effect_keyword_list(passcode, effect_keyword) values (@passcode, @Effect_Keyword)";
+            // 				Sub_Query_List.Add( Sql_Command.ExecuteNonQueryAsync());
+            // 			}
+
+            // 			Sql_Command.Parameters.Add("@Link_Arrow", DbType.String);
+
+            // 			if (this.Attribute_Type_List.Contains("Link"))
+            // 			{
+            // 				foreach (string Link_Arrow_item in Link_Arrows)
+            // 				{
+            // 					Sql_Command.Parameters["@Link_Arrow"].Value = Link_Arrow_item;
+
+            // 					Sql_Command.CommandText = "INSERT INTO ygo_link_arrows(passcode, link_arrows) values(@passcode, @Link_Arrow)";
+            // 					Sub_Query_List.Add( Sql_Command.ExecuteNonQueryAsync());
+            // 				}
+            // 			}
+            // 			await main_Query; 
+            // 		}
+            // 		else{
+            // 			 Sql_Command.CommandText = @"INSERT INTO ygo_main(passcode, name_en, name_jp, card_type) 
+            // 			values (@passcode, @name_en, @name_jp, @card_type)";
+            // 			await Sql_Command.ExecuteNonQueryAsync();
+            // 		}
+            // 		await Task.WhenAll(Sub_Query_List.ToArray());
+            // 		Sql_Transaction.Commit();
+            // 	}
+            // 	catch (Exception e)
+            // 	{
+            // 		Sql_Transaction.Rollback();
+            // 		Console.WriteLine(e.ToString());
+            // 		Console.WriteLine("record was not written to database.");
+
+
+            // 	}
+            // 	finally
+            // 	{
+            // 		SqlConnection.Close();
+            // 	}

@@ -101,7 +101,7 @@ namespace Ygo_Deck_Helper
 				{
 					var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search(Card_Name, false);
 
-					var Wikia_Card_Number_Query = await Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Passcode);
+					var Wikia_Card_Number_Query =  Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Passcode);
 					if (Wikia_Card_Number_Query.isSucsesful == true)
 					{
 						await Task.Run(() => { Card New_Card = Deck.Query_Single_Card(Wikia_Card_Number_Query.Infomation).New_Card;
