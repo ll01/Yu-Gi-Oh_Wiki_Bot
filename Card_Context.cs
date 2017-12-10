@@ -68,7 +68,7 @@ namespace Ygo_Deck_Helper
     {
         public int id { get; set; }
         public int passcode { get; set; }
-        public string effect_name { get; set; }
+        public string name { get; set; }
     }
 
     public class Foreign_Name_Table
@@ -77,7 +77,7 @@ namespace Ygo_Deck_Helper
         public int passcode { get; set; }
         public string contry_code { get; set; }
         [Column(TypeName = "VARCHAR(255)")]
-        public string card_name { get; set; }
+        public string name { get; set; }
 
     }
 
@@ -85,14 +85,14 @@ namespace Ygo_Deck_Helper
     {
         public int id { get; set; }
         public int passcode { get; set; }
-        public string link_arrow { get; set; }
+        public string name { get; set; }
 
     }
     public class Archtype_Table
     {
         public int id { get; set; }
         public int passcode { get; set; }
-        public string archtype_name { get; set; }
+        public string name { get; set; }
 
     }
 
@@ -101,7 +101,7 @@ namespace Ygo_Deck_Helper
     {
         public int id { get; set; }
         public int passcode { get; set; }
-        public string Attribute_Name{ get; set; }
+        public string name{ get; set; }
 
     }
 

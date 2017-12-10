@@ -127,10 +127,10 @@ namespace Ygo_Deck_Helper
                 {
                     var Link_Arrows_To_Insert = Link_Arrows.Select(x =>
                     {
-                        if (card_database_context.link_arrow_Table.All(y => y.link_arrow != x && y.passcode != this.Passcode))
+                        if (card_database_context.link_arrow_Table.All(y => y.name != x && y.passcode != this.Passcode))
                         {
                             var temp = new link_arrow_Table();
-                            temp.link_arrow = x;
+                            temp.name = x;
                             temp.passcode = this.Passcode;
                             return temp;
                         }
@@ -141,12 +141,13 @@ namespace Ygo_Deck_Helper
 
                     }).Where(x => x != null);
 
+                    //TODO: ALLOW MULTIPLES
                     var Effect_Types_To_Insert = Effect_type_list.Select(x =>
                     {
-                        if (card_database_context.Effect_keyword_Table.All(y => y.effect_name != x && y.passcode != this.Passcode))
+                        if (card_database_context.Effect_keyword_Table.All(y => y.name != x && y.passcode != this.Passcode))
                         {
                             var temp = new Effect_keyword_Table();
-                            temp.effect_name = x;
+                            temp.name = x;
                             temp.passcode = this.Passcode;
                             return temp;
                         }
@@ -159,10 +160,10 @@ namespace Ygo_Deck_Helper
 
                     var Archtypes_To_Insert = Archtype_List.Select(x =>
                     {
-                        if (card_database_context.Archtype_Table.All(y => y.archtype_name != x && y.passcode != this.Passcode))
+                        if (card_database_context.Archtype_Table.All(y => y.name != x && y.passcode != this.Passcode))
                         {
                             var temp = new Archtype_Table();
-                            temp.archtype_name = x;
+                            temp.name = x;
                             temp.passcode = this.Passcode;
                             return temp;
                         }
@@ -174,10 +175,10 @@ namespace Ygo_Deck_Helper
 
                     var Attribute_Types_To_Insert = Attribute_Type_List.Select(x =>
                     {
-                        if (card_database_context.Attribute_Table.All(y => y.Attribute_Name != x && y.passcode != this.Passcode))
+                        if (card_database_context.Attribute_Table.All(y => y.name != x && y.passcode != this.Passcode))
                         {
                             var temp = new Attribute_Table();
-                            temp.Attribute_Name = x;
+                            temp.name = x;
                             temp.passcode = this.Passcode;
                             return temp;
                         }

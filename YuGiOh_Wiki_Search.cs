@@ -268,7 +268,7 @@ namespace Ygo_Deck_Helper
                 var Name_Infomation  =  Scrape_Card_Name(i);
                 Foreign_Name_Table temp = new Foreign_Name_Table();
                 if (Name_Infomation.isSucsesful) {
-                temp.card_name = Name_Infomation.Infomation;
+                temp.name = Name_Infomation.Infomation;
                 temp.contry_code = Name_Infomation.Country_Code;
                 Foreign_Names.Add(temp);
                 }
