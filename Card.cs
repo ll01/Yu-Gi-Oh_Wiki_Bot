@@ -144,7 +144,7 @@ namespace Ygo_Deck_Helper
                     //TODO: ALLOW MULTIPLES
                     var Effect_Types_To_Insert = Effect_type_list.Select(x =>
                     {
-                        if (card_database_context.Effect_keyword_Table.All(y => y.name != x && y.passcode != this.Passcode))
+                        if (card_database_context.Effect_keyword_Table.All(y => y.passcode != this.Passcode))
                         {
                             var temp = new Effect_keyword_Table();
                             temp.name = x;
@@ -160,7 +160,7 @@ namespace Ygo_Deck_Helper
 
                     var Archtypes_To_Insert = Archtype_List.Select(x =>
                     {
-                        if (card_database_context.Archtype_Table.All(y => y.name != x && y.passcode != this.Passcode))
+                        if (card_database_context.Archtype_Table.All(y => y.passcode != this.Passcode))
                         {
                             var temp = new Archtype_Table();
                             temp.name = x;
@@ -175,7 +175,7 @@ namespace Ygo_Deck_Helper
 
                     var Attribute_Types_To_Insert = Attribute_Type_List.Select(x =>
                     {
-                        if (card_database_context.Attribute_Table.All(y => y.name != x && y.passcode != this.Passcode))
+                        if (card_database_context.Attribute_Table.All(y => y.passcode != this.Passcode))
                         {
                             var temp = new Attribute_Table();
                             temp.name = x;

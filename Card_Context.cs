@@ -59,7 +59,6 @@ namespace Ygo_Deck_Helper
         public int? scale { get; set; }
         public int? attack { get; set; }
         public int? defence { get; set; }
-        public int link { get; set; }
 
     }
 
