@@ -25,11 +25,10 @@ namespace Ygo_Deck_Helper
         public int? Attack { get => main_Card_Data.attack; set => main_Card_Data.attack = value; }
         public int? Defence { get => main_Card_Data.defence; set => main_Card_Data.defence = value; }
 
+         public List<string> Link_Arrows { get => main_Card_Data.link_arrows.ToList(); set => main_Card_Data.link_arrows = value.ToArray(); }
 
 
 
-        private List<string> m_Link_Arrows = new List<string>();
-        public List<string> Link_Arrows { get => m_Link_Arrows; set => m_Link_Arrows = value; }
         private List<string> m_effect_type_list = new List<string>();
         public List<string> Effect_type_list { get => m_effect_type_list; set => m_effect_type_list = value; }
         private List<string> m_Archtype_List = new List<string>();
@@ -125,21 +124,7 @@ namespace Ygo_Deck_Helper
             {
                 if (card_database_context.Main_Card_Data.All(x => x.passcode != this.Passcode))
                 {
-                    var Link_Arrows_To_Insert = Link_Arrows.Select(x =>
-                    {
-                        if (card_database_context.link_arrow_Table.All(y => y.name != x && y.passcode != this.Passcode))
-                        {
-                            var temp = new link_arrow_Table();
-                            temp.name = x;
-                            temp.passcode = this.Passcode;
-                            return temp;
-                        }
-                        else
-                        {
-                            return null;
-                        }
-
-                    }).Where(x => x != null);
+                
 
                     //TODO: ALLOW MULTIPLES
                     var Effect_Types_To_Insert = Effect_type_list.Select(x =>
@@ -194,7 +179,6 @@ namespace Ygo_Deck_Helper
 
 
                     card_database_context.Archtype_Table.AddRange(Archtypes_To_Insert);
-                    card_database_context.link_arrow_Table.AddRange(Link_Arrows_To_Insert);
                     card_database_context.Effect_keyword_Table.AddRange(Effect_Types_To_Insert);
                     card_database_context.Attribute_Table.AddRange(Attribute_Types_To_Insert);
                     card_database_context.Main_Card_Data.AddRange(main_Card_Data);
