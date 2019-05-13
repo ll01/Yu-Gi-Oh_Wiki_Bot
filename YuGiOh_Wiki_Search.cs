@@ -122,17 +122,17 @@ namespace Ygo_Deck_Helper
 
 
                    default:
-                       Exception e = new NotImplementedException("Feild to scrape " + Data_Field.ToString() + "not implemented yet");
+                       Exception e = new NotImplementedException("Field to scrape " + Data_Field.ToString() + "not implemented yet");
                        throw e;
                }
 
 
                 //find the table row that contains card number and scrap that cell
                 var Card_Text_Node = this.Card_Page.DocumentNode.SelectNodes(xPath_Query);
-               var Card_Data = GetCardTextFromNode(Card_Text_Node, select_Multiple);
-               string Card_Text = Card_Data.Card_Text;
-               bool isSucsesful = Card_Data.isSucsesful;
-               return (Card_Text, isSucsesful);
+                var Card_Data = GetCardTextFromNode(Card_Text_Node, select_Multiple);
+                string Card_Text = Card_Data.Card_Text;
+                bool isSucsesful = Card_Data.isSucsesful;
+                return (Card_Text, isSucsesful);
         }
         public (string Card_Text , bool isSucsesful) GetCardTextFromNode(HtmlNodeCollection Card_Text_Node, bool select_Multiple) {
             string Card_Text = NOT_APPLICABLE;

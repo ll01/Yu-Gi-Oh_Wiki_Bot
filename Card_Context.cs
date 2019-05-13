@@ -37,10 +37,12 @@ namespace Ygo_Deck_Helper
             SaveChanges();
         }
 
+
         public Card_Context(Database database)
         {
             currentDatabase = database;
             this.Database.EnsureCreated();
+          
         }
 
 
@@ -48,7 +50,7 @@ namespace Ygo_Deck_Helper
     public class Main_Card_Data
     {
 
-        public int id { get; set; }
+        public int id  { get; set; }  = 1;
         public int passcode { get; set; }
         [Column(TypeName = "VARCHAR(255)")]
         public string name_en { get; set; }
@@ -58,7 +60,6 @@ namespace Ygo_Deck_Helper
         public string attribute { get; set; }
         public string material { get; set; }
         public int level_or_rank { get; set; }
-        public string[] link_arrows { get; set; }
         public int? scale { get; set; }
         public int? attack { get; set; }
         public int? defence { get; set; }
