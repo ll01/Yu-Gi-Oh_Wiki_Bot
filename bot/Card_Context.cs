@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 
-namespace Ygo_Deck_Helper
+namespace Yu_Gi_Oh_Wiki_Bot
 {
 
 
@@ -116,7 +116,7 @@ namespace Ygo_Deck_Helper
     public class Attribute_Table
     {
         public int id { get; set; }
-                public string name { get; set; }
+        public string name { get; set; }
 
     }
     class Attribute_Main_Table

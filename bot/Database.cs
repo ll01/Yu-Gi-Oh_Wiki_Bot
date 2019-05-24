@@ -1,4 +1,4 @@
-﻿namespace Ygo_Deck_Helper
+﻿namespace Yu_Gi_Oh_Wiki_Bot
 {
     public class Database
     {

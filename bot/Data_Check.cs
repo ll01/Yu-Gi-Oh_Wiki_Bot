@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Ygo_Deck_Helper
+namespace Yu_Gi_Oh_Wiki_Bot
 {
 	internal class Data_Check
 	{
@@ -165,48 +165,48 @@ namespace Ygo_Deck_Helper
 		/// <summary>
 		/// checks wether the main deck has a max of 60 card and the extra/side deck has 15 (this method trunkates the deck to size)
 		/// </summary>
-		/// <param name="Deck_To_Check">the deck to check </param>
-		internal static void Deck_Card_Count_check(Deck Deck_To_Check)
-		{
-			const int Main_Max_Card_Count = 60;
-			const int Extra_Max_Card_Count = 15;
-			const int Side_Max_Card_Count = 15;
-			if (Deck_To_Check.Main_Deck.Count > Main_Max_Card_Count)
-			{
-				int Amount_To_Remove = Deck_To_Check.Main_Deck.Count - Main_Max_Card_Count;
-				for (int i = Main_Max_Card_Count; i < Deck_To_Check.Main_Deck.Count; i++)
-				{
-					if (Deck_To_Check.Overflow_Cards.Contains(Deck_To_Check.Main_Deck[i]) == false)
-						Deck_To_Check.Overflow_Cards.Add(Deck_To_Check.Main_Deck[i]);
-				}
+		// /// <param name="Deck_To_Check">the deck to check </param>
+		// internal static void Deck_Card_Count_check(Deck Deck_To_Check)
+		// {
+		// 	const int Main_Max_Card_Count = 60;
+		// 	const int Extra_Max_Card_Count = 15;
+		// 	const int Side_Max_Card_Count = 15;
+		// 	if (Deck_To_Check.Main_Deck.Count > Main_Max_Card_Count)
+		// 	{
+		// 		int Amount_To_Remove = Deck_To_Check.Main_Deck.Count - Main_Max_Card_Count;
+		// 		for (int i = Main_Max_Card_Count; i < Deck_To_Check.Main_Deck.Count; i++)
+		// 		{
+		// 			if (Deck_To_Check.Overflow_Cards.Contains(Deck_To_Check.Main_Deck[i]) == false)
+		// 				Deck_To_Check.Overflow_Cards.Add(Deck_To_Check.Main_Deck[i]);
+		// 		}
 
-				Deck_To_Check.Main_Deck.RemoveRange(Main_Max_Card_Count, Amount_To_Remove);
-			}
+		// 		Deck_To_Check.Main_Deck.RemoveRange(Main_Max_Card_Count, Amount_To_Remove);
+		// 	}
 
-			if (Deck_To_Check.Extra_deck.Count > Extra_Max_Card_Count)
-			{
-				int Amount_To_Remove = Deck_To_Check.Extra_deck.Count - Extra_Max_Card_Count;
-				for (int i = Extra_Max_Card_Count; i < Deck_To_Check.Extra_deck.Count; i++)
-				{
-					if (Deck_To_Check.Overflow_Cards.Contains(Deck_To_Check.Extra_deck[i]) == false)
-						Deck_To_Check.Overflow_Cards.Add(Deck_To_Check.Extra_deck[i]);
-				}
+		// 	if (Deck_To_Check.Extra_deck.Count > Extra_Max_Card_Count)
+		// 	{
+		// 		int Amount_To_Remove = Deck_To_Check.Extra_deck.Count - Extra_Max_Card_Count;
+		// 		for (int i = Extra_Max_Card_Count; i < Deck_To_Check.Extra_deck.Count; i++)
+		// 		{
+		// 			if (Deck_To_Check.Overflow_Cards.Contains(Deck_To_Check.Extra_deck[i]) == false)
+		// 				Deck_To_Check.Overflow_Cards.Add(Deck_To_Check.Extra_deck[i]);
+		// 		}
 
-				Deck_To_Check.Extra_deck.RemoveRange(Extra_Max_Card_Count, Amount_To_Remove);
-			}
+		// 		Deck_To_Check.Extra_deck.RemoveRange(Extra_Max_Card_Count, Amount_To_Remove);
+		// 	}
 
-			if (Deck_To_Check.Side_deck.Count > Side_Max_Card_Count)
-			{
-				int Amount_To_Remove = Deck_To_Check.Side_deck.Count - Side_Max_Card_Count;
-				for (int i = Side_Max_Card_Count; i < Deck_To_Check.Side_deck.Count; i++)
-				{
-					if (Deck_To_Check.Overflow_Cards.Contains(Deck_To_Check.Side_deck[i]) == false)
-						Deck_To_Check.Overflow_Cards.Add(Deck_To_Check.Side_deck[i]);
-				}
+		// 	if (Deck_To_Check.Side_deck.Count > Side_Max_Card_Count)
+		// 	{
+		// 		int Amount_To_Remove = Deck_To_Check.Side_deck.Count - Side_Max_Card_Count;
+		// 		for (int i = Side_Max_Card_Count; i < Deck_To_Check.Side_deck.Count; i++)
+		// 		{
+		// 			if (Deck_To_Check.Overflow_Cards.Contains(Deck_To_Check.Side_deck[i]) == false)
+		// 				Deck_To_Check.Overflow_Cards.Add(Deck_To_Check.Side_deck[i]);
+		// 		}
 
-				Deck_To_Check.Side_deck.RemoveRange(Side_Max_Card_Count, Amount_To_Remove);
-			}
-		}
+		// 		Deck_To_Check.Side_deck.RemoveRange(Side_Max_Card_Count, Amount_To_Remove);
+		// 	}
+		// }
 
 		/// <summary>
 		/// remove weird characters from the card names

@@ -1,5 +1,5 @@
 using System.Data;
-namespace Ygo_Deck_Helper
+namespace Yu_Gi_Oh_Wiki_Bot
 {
 	public class Ygo_Pro_Card_Database
 	{

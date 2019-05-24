@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Ygo_Deck_Helper
+namespace Yu_Gi_Oh_Wiki_Bot
 {
 
     public class Card
@@ -122,33 +122,34 @@ namespace Ygo_Deck_Helper
 
             using (var card_database_context = new Card_Context(database))
             {
-                // if (card_database_context.Main_Card_Data.All(x => x.passcode != this.Passcode))
-                // {
-                
+                 if (card_database_context.Main_Card_Data.All(x => x.passcode != this.Passcode))
+                 {
+                    
                 //     //TODO: ALLOW MULTIPLES
-                //     var Effect_Types_To_Insert = Effect_type_list.Select(x =>
-                //     {
-                //         if (card_database_context.Effect_keyword_Table.All(y => y.passcode != this.Passcode))
-                //         {
-                //             var temp = new Effect_keyword_Table();
-                //             temp.name = x;
-                //             temp.passcode = this.Passcode;
-                //             return temp;
-                //         }
-                //         else
-                //         {
-                //             return null;
-                //         }
+                    var Effect_Types_To_Insert = Effect_type_list.Select(x =>
+                    {
+                        if (card_database_context.Effect_keyword_Table.All(y => y.passcode != this.Passcode))
+                        {
+                            var temp = new Effect_keyword_Table();
+                            temp.name = x;
+                            temp.passcode = this.Passcode;
+                            return temp;
+                        }
+                        else
+                        {
+                            return null;
+                        }
 
-                //     }).Where(x => x != null);
+                    }).Where(x => x != null);
 
                     // var Archtypes_To_Insert = Archtype_List.Select(x =>
                     // {
-                    //     if (card_database_context.Archtype_Table.All(y => y. != this.id))
+                    //     if (card_database_context.Archtype_Table.All(y => y.passcode != this.Passcode))
                     //     {
                     //         var temp = new Archtype_Table();
                     //         temp.name = x;
-                    //         temp.passcode = this.Passcode;
+                    //         tem
+                            
                     //         return temp;
                     //     }
                     //     else

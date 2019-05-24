@@ -1,14 +1,14 @@
 using System;
 using System.Linq;
 using Xunit;
-using Ygo_Deck_Helper;
+using Yu_Gi_Oh_Wiki_Bot;
 using Newtonsoft.Json;
 
-namespace Ygo_Unit_Tests
+namespace Scrape_Unit_Tests
 {
-    public class UnitTest1
+    public class Scrape_Unit_Tests
     {
-        Database testDatabase = new Database("127.0.0.1", "x", "x", "card_db_test");
+
         [Fact]
         public async void Name_En()
         {
@@ -195,16 +195,16 @@ namespace Ygo_Unit_Tests
             Assert.Equal("Ignition\n Condition", TestQuery.Infomation);
         }
 
-        [Fact]
-        public async void Split_Effect_Type_List()
-        {
-            var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Evilswarm Ouroboros", false);
-            var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Effect_Type_List);
+        // [Fact]
+        // public async void Split_Effect_Type_List()
+        // {
+        //     var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Evilswarm Ouroboros", false);
+        //     var TestQuery = Wiki_Search.Scrape_Card_Field_Infomation(YuGiOh_Wiki_Search.YuGiOh_Wiki_Data_Field.Effect_Type_List);
 
-            string Effect_Collection_NoSplit = TestQuery.Infomation;
-            var Actual_Effect_Collection_Split = Data_Check.Split_Card_Effect_List(Effect_Collection_NoSplit).ToArray();
-            Assert.Equal(new string[] { "Ignition", "Condition" }, Actual_Effect_Collection_Split);
-        }
+        //     string Effect_Collection_NoSplit = TestQuery.Infomation;
+        //     var Actual_Effect_Collection_Split = Data_Check.Split_Card_Effect_List(Effect_Collection_NoSplit).ToArray();
+        //     Assert.Equal(new string[] { "Ignition", "Condition" }, Actual_Effect_Collection_Split);
+        // }
 
         [Fact]
         public async void Pendulum_Scale()
@@ -248,20 +248,20 @@ namespace Ygo_Unit_Tests
         [Fact]
         public async void Scrape_Normal_Monster()
         {
-            var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Stargrail-Bearing Priestess", false);
+            var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("Hieratic Seal of the Sun Dragon Overlord", false);
             Card Normal_Monster = await Wiki_Search.Scrape_Card();
-            Assert.Equal("Crowned by the World Chalice", Normal_Monster.Name_English);
-            Assert.Equal("星杯を戴く巫女", Normal_Monster.Name_Japanese);
+            Assert.Equal("Hieratic Seal of the Sun Dragon Overlord", Normal_Monster.Name_English);
+            Assert.Equal("神龍の聖刻印", Normal_Monster.Name_Japanese);
             Assert.Equal("Monster", Normal_Monster.Card_Type_Text);
-            Assert.Equal("WATER", Normal_Monster.Attribute);
-            Assert.Equal(new string[] { "Spellcaster", "Normal" }, Normal_Monster.Attribute_Type_List);
+            Assert.Equal("LIGHT", Normal_Monster.Attribute);
+            Assert.Equal(new string[] { "Dragon" }, Normal_Monster.Attribute_Type_List);
             Assert.Equal(0, Normal_Monster.Effect_type_list.Count());
-            Assert.Equal(2, Normal_Monster.Level_Rank_Or_Link);
+            Assert.Equal(8, Normal_Monster.Level_Rank_Or_Link);
             Assert.Equal(0, Normal_Monster.Attack);
-            Assert.Equal(2100, Normal_Monster.Defence);
-            Assert.Equal(95511642, Normal_Monster.Passcode);
-            Assert.Equal(new string[] { "World Chalice", "Mekk-Knight", "Knightmare", "Orcust" }, Normal_Monster.Archtype_List);
-            Assert.Equal(null, Normal_Monster.Matieral);
+            Assert.Equal(0, Normal_Monster.Defence);
+            Assert.Equal(13140300, Normal_Monster.Passcode);
+            Assert.Equal(new string[] { "Hieratic" }, Normal_Monster.Archtype_List);
+            Assert.Null(Normal_Monster.Matieral);
 
         }
 
@@ -277,13 +277,13 @@ namespace Ygo_Unit_Tests
             Assert.Equal(new string[] { "Dragon", "Effect" }, Normal_Monster.Attribute_Type_List);
             Assert.Equal(new string[] { "Summon", "Summon", "Quick", "Condition" }, Normal_Monster.Effect_type_list);
             Assert.Equal(8, Normal_Monster.Level_Rank_Or_Link);
-            Assert.Equal(null, Normal_Monster.Scale);
+            Assert.Null(Normal_Monster.Scale);
 
             Assert.Equal(3000, Normal_Monster.Attack);
             Assert.Equal(1800, Normal_Monster.Defence);
             Assert.Equal(48229808, Normal_Monster.Passcode);
             Assert.Equal(new string[] { "Horus the Black Flame Dragon", "LV", "Dark counterpart" }, Normal_Monster.Archtype_List);
-            Assert.Equal(null, Normal_Monster.Matieral);
+            Assert.Null(Normal_Monster.Matieral);
         }
 
 
@@ -305,7 +305,7 @@ namespace Ygo_Unit_Tests
             Assert.Equal(100, Normal_Monster.Defence);
             Assert.Equal(19619755, Normal_Monster.Passcode);
             Assert.Equal(new string[] { "Magician", "Performapal" }, Normal_Monster.Archtype_List);
-            Assert.Equal(null, Normal_Monster.Matieral);
+            Assert.Null(Normal_Monster.Matieral);
         }
 
 
@@ -320,10 +320,10 @@ namespace Ygo_Unit_Tests
             Assert.Equal("WIND", Normal_Monster.Attribute);
             Assert.Equal(new string[] { "Dragon", "Link", "Effect" }, Normal_Monster.Attribute_Type_List);
             Assert.Equal(new string[] { "Continuous", "Trigger", "Trigger" }, Normal_Monster.Effect_type_list);
-            Assert.Equal(null, Normal_Monster.Scale);
+            Assert.Null(Normal_Monster.Scale);
             Assert.Equal(1, Normal_Monster.Level_Rank_Or_Link);
             Assert.Equal(800, Normal_Monster.Attack);
-            Assert.Equal(null, Normal_Monster.Defence);
+            Assert.Null(Normal_Monster.Defence);
             Assert.Equal(31226177, Normal_Monster.Passcode);
             Assert.Equal(new string[] { "World Chalice" }, Normal_Monster.Archtype_List);
             Assert.Equal("1 Normal Monster, except a Token", Normal_Monster.Matieral);
@@ -338,16 +338,16 @@ namespace Ygo_Unit_Tests
             Assert.Equal("Battle Break", Normal_Monster.Name_English);
             Assert.Equal("バトル・ブレイク", Normal_Monster.Name_Japanese);
             Assert.Equal("Trap", Normal_Monster.Card_Type_Text);
-            Assert.Equal(null, Normal_Monster.Attribute);
+            Assert.Null(Normal_Monster.Attribute);
             Assert.Equal(new string[] { "Normal" }, Normal_Monster.Attribute_Type_List);
             Assert.Equal(new string[] { "Activation requirement", "Effect" }, Normal_Monster.Effect_type_list);
-            Assert.Equal(null, Normal_Monster.Scale);
+            Assert.Null(Normal_Monster.Scale);
             Assert.Equal(0, Normal_Monster.Level_Rank_Or_Link);
-            Assert.Equal(null, Normal_Monster.Attack);
-            Assert.Equal(null, Normal_Monster.Defence);
+            Assert.Null(Normal_Monster.Attack);
+            Assert.Null(Normal_Monster.Defence);
             Assert.Equal(22047978, Normal_Monster.Passcode);
             Assert.Equal(0, Normal_Monster.Archtype_List.Count());
-            Assert.Equal(null, Normal_Monster.Matieral);
+            Assert.Null(Normal_Monster.Matieral);
 
         }
 
@@ -360,16 +360,16 @@ namespace Ygo_Unit_Tests
             Assert.Equal("Against the Wind", Normal_Monster.Name_English);
             Assert.Equal("アゲインスト・ウィンド", Normal_Monster.Name_Japanese);
             Assert.Equal("Spell", Normal_Monster.Card_Type_Text);
-            Assert.Equal(null, Normal_Monster.Attribute);
+            Assert.Null(Normal_Monster.Attribute);
             Assert.Equal(new string[] { "Normal" }, Normal_Monster.Attribute_Type_List);
             Assert.Equal(new string[] { "Effect" }, Normal_Monster.Effect_type_list);
-            Assert.Equal(null, Normal_Monster.Scale);
+            Assert.Null(Normal_Monster.Scale);
             Assert.Equal(0, Normal_Monster.Level_Rank_Or_Link);
-            Assert.Equal(null, Normal_Monster.Attack);
-            Assert.Equal(null, Normal_Monster.Defence);
+            Assert.Null(Normal_Monster.Attack);
+            Assert.Null(Normal_Monster.Defence);
             Assert.Equal(64952266, Normal_Monster.Passcode);
             Assert.Equal(new string[] { "Blackwing" }, Normal_Monster.Archtype_List);
-            Assert.Equal(null, Normal_Monster.Matieral);
+            Assert.Null(Normal_Monster.Matieral);
 
         }
 
@@ -382,16 +382,16 @@ namespace Ygo_Unit_Tests
             Assert.Equal("U.A. Powered Jersey", Normal_Monster.Name_English);
             Assert.Equal("Ｕ．Ａ．パワードギプス", Normal_Monster.Name_Japanese);
             Assert.Equal("Spell", Normal_Monster.Card_Type_Text);
-            Assert.Equal(null, Normal_Monster.Attribute);
+            Assert.Null(Normal_Monster.Attribute);
             Assert.Equal(new string[] { "Equip" }, Normal_Monster.Attribute_Type_List);
             Assert.Equal(new string[] { "Condition", "Continuous-like", "Trigger-like", "Trigger-like", "Trigger-like" }, Normal_Monster.Effect_type_list);
-            Assert.Equal(null, Normal_Monster.Scale);
+            Assert.Null(Normal_Monster.Scale);
             Assert.Equal(0, Normal_Monster.Level_Rank_Or_Link);
-            Assert.Equal(null, Normal_Monster.Attack);
-            Assert.Equal(null, Normal_Monster.Defence);
+            Assert.Null(Normal_Monster.Attack);
+            Assert.Null(Normal_Monster.Defence);
             Assert.Equal(35884610, Normal_Monster.Passcode);
             Assert.Equal(new string[] { "U.A." }, Normal_Monster.Archtype_List);
-            Assert.Equal(null, Normal_Monster.Matieral);
+            Assert.Null(Normal_Monster.Matieral);
 
         }
 
@@ -407,46 +407,15 @@ namespace Ygo_Unit_Tests
             Assert.Equal("DARK", Normal_Monster.Attribute);
             Assert.Equal(new string[] { "Machine", "Fusion", "Effect" }, Normal_Monster.Attribute_Type_List);
             Assert.Equal(new string[] { "Summon", "Trigger", "Continuous", "Continuous" }, Normal_Monster.Effect_type_list);
-            Assert.Equal(null, Normal_Monster.Scale);
+            Assert.Null(Normal_Monster.Scale);
             Assert.Equal(9, Normal_Monster.Level_Rank_Or_Link);
-            Assert.Equal(null, Normal_Monster.Attack);
-            Assert.Equal(null, Normal_Monster.Defence);
+            Assert.Null(Normal_Monster.Attack);
+            Assert.Null(Normal_Monster.Defence);
             Assert.Equal(64599569, Normal_Monster.Passcode);
             Assert.Equal(new string[] { "Chimeratech", "Cyber Dragon" }, Normal_Monster.Archtype_List);
             Assert.Equal("\"Cyber Dragon\" + 1+ Machine monsters", Normal_Monster.Matieral);
         }
 
-
-        [Fact]
-        public async void insert_Card_Into_Database()
-        {
-
-            var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("http://yugioh.wikia.com/wiki/Dark_Magician_(Arkana)", true);
-            Card Normal_Monster = await Wiki_Search.Scrape_Card();
-            Normal_Monster.insert_Into_Wiki_Database(testDatabase);
-
-            using (var Card_Context = new Card_Context(testDatabase))
-            {
-                Card_Context.SaveChanges();
-                Main_Card_Data Normal_Monster_From_Database_main_card_data = Card_Context.Main_Card_Data.First(x => x.passcode == Normal_Monster.Passcode);
-                // var Normal_Monster_From_Database_Archtype_List = Card_Context.Archtype_Table.Where(x => x.passcode == Normal_Monster.Passcode).Select(x => x.name).ToList();
-                //var Normal_Monster_From_Database_Link_Arrow_List  = Card_Context.link_arrow_Table.Where(x => x.passcode == Normal_Monster.Passcode).Select(x => x.name).ToList();
-                //var Normal_Monster_From_Database_Foreign_Name_List = Card_Context.Foreign_Name_Table.Where(x => x.passcode == Normal_Monster.Passcode).ToList();
-
-                Assert.Equal(JsonConvert.SerializeObject(Normal_Monster.Get_main_card_data()), JsonConvert.SerializeObject(Normal_Monster_From_Database_main_card_data));
-                //Assert.Equal(Normal_Monster.Archtype_List.OrderBy(i => i),Normal_Monster_From_Database_Archtype_List.OrderBy(i => i));
-                //Assert.Equal(Normal_Monster.Link_Arrows.OrderBy(i => i), Normal_Monster_From_Database_Link_Arrow_List.OrderBy(i => i));
-                //Assert.Equal(Normal_Monster.Foreign_Name_Entrys.Select(i=> i.name).OrderBy(i => i), Normal_Monster_From_Database_Foreign_Name_List.Select(i => i.name).OrderBy(i => i));
-            }
-        }
-
-
-
-        // [Fact]
-        // public async void Scrape_Card()
-        // {
-        //     // await YuGiOh_Wiki_Search.Scrape_All_Cards(testDatabase);
-        // }
 
     }
 }
