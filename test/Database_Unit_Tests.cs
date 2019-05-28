@@ -8,7 +8,7 @@ namespace Database_Unit_Tests
 {
     public class Database_Unit_Tests
     {
-         Database testDatabase = new Database("127.0.0.1", "x", "x", "card_db_test");
+        Database testDatabase = new Database("127.0.0.1", "x", "x", "card_db_test");
         [Fact]
         public async void insert_Card_Into_Database()
         {
@@ -19,7 +19,7 @@ namespace Database_Unit_Tests
 
             using (var Card_Context = new Card_Context(testDatabase))
             {
-                
+
                 Card_Context.SaveChanges();
                 Main_Card_Data Normal_Monster_From_Database_main_card_data = Card_Context.Main_Card_Data.First(x => x.passcode == Normal_Monster.Passcode);
                 // var data = Card

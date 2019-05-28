@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
-using System.Data.SQLite;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -28,7 +27,7 @@ namespace Yu_Gi_Oh_Wiki_Bot
         public int? Defence { get => main_Card_Data.defence; set => main_Card_Data.defence = value; }
 
         private List<string> m_link_arrow_list = new List<string>();
-        public List<string> Link_Arrows { get => m_link_arrow_list; set=> m_link_arrow_list = value;}
+        public List<string> Link_Arrows { get => m_link_arrow_list; set => m_link_arrow_list = value; }
         private List<string> m_effect_type_list = new List<string>();
         public List<string> Effect_type_list { get => m_effect_type_list; set => m_effect_type_list = value; }
         private List<string> m_Archtype_List = new List<string>();
@@ -104,87 +103,25 @@ namespace Yu_Gi_Oh_Wiki_Bot
             return main_Card_Data;
         }
 
-
-
-        public void Add_Nullable_Parameter(SQLiteCommand Sql_Command, string Parameter_Name, object Value_To_Add)
-        {
-            if (Value_To_Add != null)
-            {
-                Sql_Command.Parameters.AddWithValue(Parameter_Name, Value_To_Add);
-            }
-            else
-            {
-                Sql_Command.Parameters.AddWithValue(Parameter_Name, DBNull.Value);
-            }
-        }
         public void insert_Into_Wiki_Database(Database database)
         {
 
             using (var card_database_context = new Card_Context(database))
             {
-                 if (card_database_context.Main_Card_Data.All(x => x.passcode != this.Passcode))
-                 {
-                    
-                //     //TODO: ALLOW MULTIPLES
-                    var Effect_Types_To_Insert = Effect_type_list.Select(x =>
+                var effects = new List<Effect_keyword_Main_Table>();
+                foreach (var effect in m_effect_type_list)
+                {
+                    var one = new Effect_keyword_Table { name = effect };
+                    card_database_context.Add(new Effect_keyword_Main_Table
                     {
-                        if (card_database_context.Effect_keyword_Table.All(y => y.passcode != this.Passcode))
-                        {
-                            var temp = new Effect_keyword_Table();
-                            temp.name = x;
-                            temp.passcode = this.Passcode;
-                            return temp;
-                        }
-                        else
-                        {
-                            return null;
-                        }
-
-                    }).Where(x => x != null);
-
-                    // var Archtypes_To_Insert = Archtype_List.Select(x =>
-                    // {
-                    //     if (card_database_context.Archtype_Table.All(y => y.passcode != this.Passcode))
-                    //     {
-                    //         var temp = new Archtype_Table();
-                    //         temp.name = x;
-                    //         tem
-                            
-                    //         return temp;
-                    //     }
-                    //     else
-                    //     {
-                    //         return null;
-                    //     }
-                    // }).Where(x => x != null);
-
-                    // var Attribute_Types_To_Insert = Attribute_Type_List.Select(x =>
-                    // {
-                    //     if (card_database_context.Attribute_Table.All(y => y.passcode != this.Passcode))
-                    //     {
-                    //         var temp = new Attribute_Table();
-                    //         temp.name = x;
-                    //         temp.passcode = this.Passcode;
-                    //         return temp;
-                    //     }
-                    //     else
-                    //     {
-                    //         return null;
-                    //     }
-                    // }).Where(x => x != null);
-
-
-                    //http://www.hexacta.com/2016/06/01/task-run-vs-async-await/
-                    //TODO: WRITE TABLE INSERTION   
-
-
-                    // card_database_context.Archtype_Table.AddRange(Archtypes_To_Insert);
-                    card_database_context.Effect_keyword_Table.AddRange(Effect_Types_To_Insert);
-                    // card_database_context.Attribute_Table.AddRange(Attribute_Types_To_Insert);
-                    card_database_context.Main_Card_Data.AddRange(main_Card_Data);
-                    card_database_context.Foreign_Name_Table.AddRange(Foreign_Name_Entrys);
+                        Effect_keyword_Table = one,
+                        Main_Card_Data = main_Card_Data
+                    });
                 }
+                Console.WriteLine(card_database_context.Effect_keyword_Table.Count());
+                Console.WriteLine(card_database_context.Main_Card_Data.Count());
             }
+            
 
         }
     }

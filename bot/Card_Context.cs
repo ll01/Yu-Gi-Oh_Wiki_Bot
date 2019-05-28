@@ -22,10 +22,9 @@ namespace Yu_Gi_Oh_Wiki_Bot
         Database currentDatabase;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
+        {   
             optionsBuilder.UseMySql(currentDatabase.GenerateConnectionString());
         }
-
 
         public void ClearAllTables()
         {
@@ -42,7 +41,7 @@ namespace Yu_Gi_Oh_Wiki_Bot
         {
             currentDatabase = database;
             this.Database.EnsureCreated();
-          
+
         }
 
 
@@ -50,7 +49,7 @@ namespace Yu_Gi_Oh_Wiki_Bot
     public class Main_Card_Data
     {
 
-        public int id  { get; set; }  = 1;
+        public int id { get; set; } = 1;
         public int passcode { get; set; }
         [Column(TypeName = "VARCHAR(255)")]
         public string name_en { get; set; }
@@ -63,7 +62,10 @@ namespace Yu_Gi_Oh_Wiki_Bot
         public int? scale { get; set; }
         public int? attack { get; set; }
         public int? defence { get; set; }
-
+        public virtual ICollection<Effect_keyword_Main_Table> Effect_keyword_Main { get; set; }
+        public virtual ICollection<Foreign_Name_Main_Table> Foreign_Name_Main { get; set; }
+        public virtual ICollection<Archtype_Main_Table> Archtype_Main { get; set; }
+        public virtual ICollection<Attribute_Main_Table> Attribute_Main { get; set; }
 
     }
 
@@ -71,46 +73,53 @@ namespace Yu_Gi_Oh_Wiki_Bot
     public class Effect_keyword_Table
     {
         public int id { get; set; }
-        public int passcode { get; set; }
         public string name { get; set; }
     }
     public class Effect_keyword_Main_Table
     {
-         [Key, Column(Order = 0)]
+        [Key, Column(Order = 0)]
         public int keywordID;
-         [Key, Column(Order = 1)]
+        [Key, Column(Order = 1)]
         public int cardID;
+
+        public virtual Effect_keyword_Table Effect_keyword_Table { get; set; }
+        public virtual Main_Card_Data Main_Card_Data { get; set; }
     }
 
     public class Foreign_Name_Table
     {
         public int id { get; set; }
-      
+
         public string contry_code { get; set; }
         [Column(TypeName = "VARCHAR(255)")]
         public string name { get; set; }
 
     }
-    class Foreign_Name_Main_Table
+    public class Foreign_Name_Main_Table
     {
-         [Key, Column(Order = 0)]
+        [Key, Column(Order = 0)]
         public int nameID;
-         [Key, Column(Order = 1)]
+        [Key, Column(Order = 1)]
         public int cardID;
+
+        public virtual Foreign_Name_Table Foreign_Name_Table { get; set; }
+        public virtual Main_Card_Data Main_Card_Data { get; set; }
     }
     public class Archtype_Table
     {
         public int id { get; set; }
-      
+
         public string name { get; set; }
 
     }
-    class Archtype_Main_Table
+    public class Archtype_Main_Table
     {
-         [Key, Column(Order = 0)]
-        public int archtypeID;
-         [Key, Column(Order = 1)]
+        [Key, Column(Order = 0)]
+        // public int archtypeID;
+        // [Key, Column(Order = 1)]
         public int cardID;
+        public virtual Archtype_Table Archtype_Table { get; set; }
+        public virtual Main_Card_Data Main_Card_Data { get; set; }
     }
 
     public class Attribute_Table
@@ -119,13 +128,14 @@ namespace Yu_Gi_Oh_Wiki_Bot
         public string name { get; set; }
 
     }
-    class Attribute_Main_Table
+    public class Attribute_Main_Table
     {
-         [Key, Column(Order = 0)]
+        [Key, Column(Order = 0)]
         public int attributeID;
-         [Key, Column(Order = 1)]
+        [Key, Column(Order = 1)]
         public int cardID;
-
+        public virtual Attribute_Table Attribute_Table { get; set; }
+        public virtual Main_Card_Data Main_Card_Data { get; set; }
     }
 
 }
