@@ -8,16 +8,18 @@ namespace Database_Unit_Tests
 {
     public class Database_Unit_Tests
     {
-        Database testDatabase = new Database("127.0.0.1", "x", "x", "card_db_test");
+         
+        // Database testDatabase =
         [Fact]
         public async void insert_Card_Into_Database()
         {
-
+ 
+            Yu_Gi_Oh_Wiki_Bot.Card_Context.currentDatabase =new Yu_Gi_Oh_Wiki_Bot.Database( "127.0.0.1", "x", "x", "card_db_test");
             var Wiki_Search = await YuGiOh_Wiki_Search.Create_YuGiOh_Wiki_Search("http://yugioh.wikia.com/wiki/Dark_Magician_(Arkana)", true);
             Card Normal_Monster = await Wiki_Search.Scrape_Card();
-            Normal_Monster.insert_Into_Wiki_Database(testDatabase);
+            Normal_Monster.insert_Into_Wiki_Database();
 
-            using (var Card_Context = new Card_Context(testDatabase))
+            using (var Card_Context = new Card_Context())
             {
 
                 Card_Context.SaveChanges();

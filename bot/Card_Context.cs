@@ -18,11 +18,12 @@ namespace Yu_Gi_Oh_Wiki_Bot
         public DbSet<Archtype_Table> Archtype_Table { get; set; }
 
         public DbSet<Attribute_Table> Attribute_Table { get; set; }
-
-        Database currentDatabase;
+        // public static Database CurrentDatabase { get => currentDatabase; set => currentDatabase = value; }
+        static public Database currentDatabase;
+    
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {   
+        {  
             optionsBuilder.UseMySql(currentDatabase.GenerateConnectionString());
         }
 
@@ -36,12 +37,10 @@ namespace Yu_Gi_Oh_Wiki_Bot
             SaveChanges();
         }
 
-
-        public Card_Context(Database database)
+        
+        public Card_Context()
         {
-            currentDatabase = database;
             this.Database.EnsureCreated();
-
         }
 
 

@@ -358,7 +358,7 @@ namespace Yu_Gi_Oh_Wiki_Bot
                         Card New_Card = await Card_Query.Scrape_Card();
                         if (insert != null)
                             await insert;
-                        insert = Task.Run(() => New_Card.insert_Into_Wiki_Database(DatabaseToAddCardsTo));
+                        insert = Task.Run(() => New_Card.insert_Into_Wiki_Database());
                     }
                     catch(Exception e)
                     {
@@ -373,7 +373,7 @@ namespace Yu_Gi_Oh_Wiki_Bot
                     }
                     finally
                     {
-                        using (var card_context = new Card_Context(DatabaseToAddCardsTo))
+                        using (var card_context = new Card_Context())
                         {
                             //TODO: FINISH SAVING
                         }

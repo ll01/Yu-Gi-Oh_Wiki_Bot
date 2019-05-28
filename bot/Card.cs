@@ -103,10 +103,10 @@ namespace Yu_Gi_Oh_Wiki_Bot
             return main_Card_Data;
         }
 
-        public void insert_Into_Wiki_Database(Database database)
+        public void insert_Into_Wiki_Database()
         {
 
-            using (var card_database_context = new Card_Context(database))
+            using (var card_database_context = new Card_Context())
             {
                 var effects = new List<Effect_keyword_Main_Table>();
                 foreach (var effect in m_effect_type_list)
