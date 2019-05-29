@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
+using System.Configuration;
 
 namespace Yu_Gi_Oh_Wiki_Bot
 {
@@ -24,7 +25,8 @@ namespace Yu_Gi_Oh_Wiki_Bot
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {  
-            optionsBuilder.UseMySql(currentDatabase.GenerateConnectionString());
+               var db =new Yu_Gi_Oh_Wiki_Bot.Database( "127.0.0.1", "x", "x", "card_db_test");
+            optionsBuilder.UseMySql( db.GenerateConnectionString());
         }
 
         public void ClearAllTables()
@@ -48,7 +50,7 @@ namespace Yu_Gi_Oh_Wiki_Bot
     public class Main_Card_Data
     {
 
-        public int id { get; set; } = 1;
+        public int cardID { get; set; } = 1;
         public int passcode { get; set; }
         [Column(TypeName = "VARCHAR(255)")]
         public string name_en { get; set; }
@@ -77,9 +79,9 @@ namespace Yu_Gi_Oh_Wiki_Bot
     public class Effect_keyword_Main_Table
     {
         [Key, Column(Order = 0)]
-        public int keywordID;
+        public int keywordID{ get; set; }
         [Key, Column(Order = 1)]
-        public int cardID;
+        public int cardID{ get; set; }
 
         public virtual Effect_keyword_Table Effect_keyword_Table { get; set; }
         public virtual Main_Card_Data Main_Card_Data { get; set; }
@@ -97,16 +99,16 @@ namespace Yu_Gi_Oh_Wiki_Bot
     public class Foreign_Name_Main_Table
     {
         [Key, Column(Order = 0)]
-        public int nameID;
+        public int nameID{ get; set; }
         [Key, Column(Order = 1)]
-        public int cardID;
+        public int cardID{ get; set; }
 
         public virtual Foreign_Name_Table Foreign_Name_Table { get; set; }
         public virtual Main_Card_Data Main_Card_Data { get; set; }
     }
     public class Archtype_Table
     {
-        public int id { get; set; }
+        public int archtypeID { get; set; }
 
         public string name { get; set; }
 
@@ -114,9 +116,9 @@ namespace Yu_Gi_Oh_Wiki_Bot
     public class Archtype_Main_Table
     {
         [Key, Column(Order = 0)]
-        // public int archtypeID;
-        // [Key, Column(Order = 1)]
-        public int cardID;
+        public int archtypeID{ get; set; }
+        [Key, Column(Order = 1)]
+        public int cardID{ get; set; }
         public virtual Archtype_Table Archtype_Table { get; set; }
         public virtual Main_Card_Data Main_Card_Data { get; set; }
     }
@@ -130,9 +132,9 @@ namespace Yu_Gi_Oh_Wiki_Bot
     public class Attribute_Main_Table
     {
         [Key, Column(Order = 0)]
-        public int attributeID;
+        public int attributeID{ get; set; }
         [Key, Column(Order = 1)]
-        public int cardID;
+        public int cardID{ get; set; }
         public virtual Attribute_Table Attribute_Table { get; set; }
         public virtual Main_Card_Data Main_Card_Data { get; set; }
     }
