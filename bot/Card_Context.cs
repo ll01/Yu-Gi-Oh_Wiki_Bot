@@ -21,12 +21,12 @@ namespace Yu_Gi_Oh_Wiki_Bot
         public DbSet<Attribute_Table> Attribute_Table { get; set; }
         // public static Database CurrentDatabase { get => currentDatabase; set => currentDatabase = value; }
         static public Database currentDatabase;
-    
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {  
-               var db =new Yu_Gi_Oh_Wiki_Bot.Database( "127.0.0.1", "x", "x", "card_db_test");
-            optionsBuilder.UseMySql( db.GenerateConnectionString());
+        {
+            var db = new Yu_Gi_Oh_Wiki_Bot.Database("127.0.0.1", "x", "x", "card_db_test");
+            optionsBuilder.UseMySql(db.GenerateConnectionString());
         }
 
         public void ClearAllTables()
@@ -38,8 +38,20 @@ namespace Yu_Gi_Oh_Wiki_Bot
             Attribute_Table.RemoveRange(Attribute_Table);
             SaveChanges();
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Effect_keyword_Main_Table>()
+            .HasKey(c => new {c.cardID,c.keywordID});
 
-        
+            modelBuilder.Entity<Effect_keyword_Table>()
+            .HasMany(c => c.Effect_keyword_Main_Table)
+            .WithRequired()
+            .HasForeignKey(c => c.);
+            
+
+        }
+
+
         public Card_Context()
         {
             this.Database.EnsureCreated();
@@ -63,25 +75,27 @@ namespace Yu_Gi_Oh_Wiki_Bot
         public int? scale { get; set; }
         public int? attack { get; set; }
         public int? defence { get; set; }
-        public virtual ICollection<Effect_keyword_Main_Table> Effect_keyword_Main { get; set; }
-        public virtual ICollection<Foreign_Name_Main_Table> Foreign_Name_Main { get; set; }
-        public virtual ICollection<Archtype_Main_Table> Archtype_Main { get; set; }
-        public virtual ICollection<Attribute_Main_Table> Attribute_Main { get; set; }
+        public  ICollection<Effect_keyword_Main_Table> Effect_keyword_Main { get; set; }
+        public  ICollection<Foreign_Name_Main_Table> Foreign_Name_Main { get; set; }
+        public ICollection<Archtype_Main_Table> Archtype_Main { get; set; }
+        public ICollection<Attribute_Main_Table> Attribute_Main { get; set; }
 
     }
-
+// https://www.entityframeworktutorial.net/efcore/configure-many-to-many-relationship-in-ef-core.aspx
 
     public class Effect_keyword_Table
     {
         public int id { get; set; }
         public string name { get; set; }
+        public ICollection<Effect_keyword_Main_Table> Effect_keyword_Main_Table { get; set;}
+        public virtual Main_Card_Data Main_Card_Data { get; set; }
     }
     public class Effect_keyword_Main_Table
     {
-        [Key, Column(Order = 0)]
-        public int keywordID{ get; set; }
-        [Key, Column(Order = 1)]
-        public int cardID{ get; set; }
+
+        public int keywordID { get; set; }
+
+        public int cardID { get; set; }
 
         public virtual Effect_keyword_Table Effect_keyword_Table { get; set; }
         public virtual Main_Card_Data Main_Card_Data { get; set; }
@@ -98,10 +112,10 @@ namespace Yu_Gi_Oh_Wiki_Bot
     }
     public class Foreign_Name_Main_Table
     {
-        [Key, Column(Order = 0)]
-        public int nameID{ get; set; }
-        [Key, Column(Order = 1)]
-        public int cardID{ get; set; }
+
+        public int nameID { get; set; }
+
+        public int cardID { get; set; }
 
         public virtual Foreign_Name_Table Foreign_Name_Table { get; set; }
         public virtual Main_Card_Data Main_Card_Data { get; set; }
@@ -115,10 +129,9 @@ namespace Yu_Gi_Oh_Wiki_Bot
     }
     public class Archtype_Main_Table
     {
-        [Key, Column(Order = 0)]
-        public int archtypeID{ get; set; }
-        [Key, Column(Order = 1)]
-        public int cardID{ get; set; }
+
+        public int archtypeID { get; set; }
+        public int cardID { get; set; }
         public virtual Archtype_Table Archtype_Table { get; set; }
         public virtual Main_Card_Data Main_Card_Data { get; set; }
     }
@@ -131,10 +144,10 @@ namespace Yu_Gi_Oh_Wiki_Bot
     }
     public class Attribute_Main_Table
     {
-        [Key, Column(Order = 0)]
-        public int attributeID{ get; set; }
-        [Key, Column(Order = 1)]
-        public int cardID{ get; set; }
+
+        public int attributeID { get; set; }
+
+        public int cardID { get; set; }
         public virtual Attribute_Table Attribute_Table { get; set; }
         public virtual Main_Card_Data Main_Card_Data { get; set; }
     }
